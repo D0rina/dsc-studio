@@ -1,56 +1,86 @@
 import { NextRequest, NextResponse } from "next/server";
 import { redis, BOOKINGS_KEY } from "@/lib/redis";
+import { occupiedSlots, canFit, priceFor, toISODate, Razina } from "@/lib/slots";
 
 export type Booking = {
   id: string;
-  name: string;
-  contact: string;
-  service: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  grade: string; // razred
+  topic: string; // gradivo / predmet
+  razina: Razina;
   date: string; // YYYY-MM-DD
-  time: string; // HH:00
+  time: string; // HH:MM — početak
+  duration: number; // u minutama
+  price: number; // u eurima
   message?: string;
   status: "pending" | "confirmed" | "rejected";
   createdAt: string;
 };
 
-// GET — javno: vraća SAMO datum/vrijeme/status potvrđenih i na čekanju
-// termina (bez imena/kontakta), da kalendar zna što je zauzeto.
-export async function GET() {
-  const all = ((await redis.get<Booking[]>(BOOKINGS_KEY)) ?? []) as Booking[];
-  const busy = all
-    .filter((b) => b.status !== "rejected")
-    .map((b) => ({ date: b.date, time: b.time, status: b.status }));
-  return NextResponse.json({ busy });
+function busySlotsForDate(all: Booking[], date: string): Set<string> {
+  const set = new Set<string>();
+  for (const b of all) {
+    if (b.date !== date || b.status === "rejected") continue;
+    for (const t of occupiedSlots(b.time, b.duration)) set.add(t);
+  }
+  return set;
 }
 
-// POST — javno: netko traži termin. Uvijek ide u "pending" dok ga ne odobriš.
+// GET — javno: vraća zauzete 15-minutne blokove po danu (bez osobnih podataka),
+// da kalendar zna gdje se odabrano trajanje uopće može smjestiti.
+export async function GET() {
+  const all = ((await redis.get<Booking[]>(BOOKINGS_KEY)) ?? []) as Booking[];
+  const byDate: Record<string, { time: string; status: "pending" | "confirmed" }[]> = {};
+  for (const b of all) {
+    if (b.status === "rejected") continue;
+    byDate[b.date] = byDate[b.date] ?? [];
+    for (const t of occupiedSlots(b.time, b.duration)) {
+      byDate[b.date].push({ time: t, status: b.status });
+    }
+  }
+  return NextResponse.json({ busyByDate: byDate });
+}
+
+// POST — javno: zahtjev za termin. Uvijek ide u "pending" dok se ne odobri.
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { name, contact, service, date, time, message } = body ?? {};
+  const { firstName, lastName, phone, email, grade, topic, date, time, duration, razina, message } =
+    body ?? {};
 
-  if (!name || !contact || !service || !date || !time) {
+  if (
+    !firstName || !lastName || !phone || !email || !grade || !topic ||
+    !date || !time || !duration || !razina
+  ) {
     return NextResponse.json({ error: "Nedostaju podaci." }, { status: 400 });
   }
 
   const all = ((await redis.get<Booking[]>(BOOKINGS_KEY)) ?? []) as Booking[];
+  const busy = busySlotsForDate(all, date);
+  const dateObj = new Date(`${date}T00:00:00`);
 
-  const alreadyTaken = all.some(
-    (b) => b.date === date && b.time === time && b.status !== "rejected"
-  );
-  if (alreadyTaken) {
+  if (toISODate(dateObj) !== date || !canFit(dateObj, time, duration, busy)) {
     return NextResponse.json(
-      { error: "Taj termin je već zauzet ili čeka odobrenje." },
+      { error: "Taj termin (u cijelom trajanju) nije slobodan. Izaberi drugi." },
       { status: 409 }
     );
   }
 
   const booking: Booking = {
     id: crypto.randomUUID(),
-    name,
-    contact,
-    service,
+    firstName,
+    lastName,
+    phone,
+    email,
+    grade,
+    topic,
+    razina,
     date,
     time,
+    duration,
+    price: priceFor(duration, razina),
     message,
     status: "pending",
     createdAt: new Date().toISOString(),

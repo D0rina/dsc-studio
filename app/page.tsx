@@ -59,8 +59,9 @@ export default function Home() {
               <span className="mark">znanja</span> koje se vidi u ocjeni.
             </h1>
             <p className="text-ink-soft text-lg mb-8 max-w-md">
-              Nova Znanja su instrukcije i edukacije koje ne nude samo sat
-              gradiva — nego jasan plan kako doći do cilja, korak po korak.
+             DSC STUDIO je obrt za obrazovanje, izradu i savjetovanje — ova
+              stranica pokriva instrukcije, edukacije i pisanje radova, uz
+              jasan plan kako doći do cilja, korak po korak.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link

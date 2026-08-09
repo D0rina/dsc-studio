@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Nova Znanja — Instrukcije, priprema za maturu, edukacije web dizajna",
+  title: "DSC STUDIO obrt za obrazovanje, proizvodnju i usluge — Instrukcije, priprema za maturu, edukacije web dizajna",
   description:
     "Instrukcije iz informatike i drugih predmeta, priprema za državnu maturu i edukacije web dizajna. Jasan plan, mjerljiv napredak.",
 };

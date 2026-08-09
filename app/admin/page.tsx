@@ -72,7 +72,7 @@ export default function AdminPage() {
           onSubmit={handleLogin}
           className="rounded-3xl border border-line bg-paper-alt p-8 flex flex-col gap-4 w-full max-w-sm"
         >
-          <p className="display italic text-xl text-forest mb-2">Nova Znanja</p>
+          <p className="display italic text-xl text-forest mb-2">DSC STUDIO obrt za obrazovanje, proizvodnju i usluge</p>
           <p className="text-sm text-ink-soft mb-2">Prijava za administraciju termina.</p>
           <input
             type="password"

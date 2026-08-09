@@ -10,7 +10,9 @@ import {
   MIN_DURATION,
   MAX_DURATION,
   SLOT_MINUTES,
+  PRICE_PER_SLOT,
   priceFor,
+  Razina,
 } from "@/lib/slots";
 
 type BusyByDate = Record<string, { time: string; status: "pending" | "confirmed" }[]>;
@@ -42,6 +44,7 @@ function getWeekDays(offsetWeeks: number): Date[] {
 
 export function BookingCalendar() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
+  const [razina, setRazina] = useState<Razina | null>(null);
   const [duration, setDuration] = useState<number>(MIN_DURATION);
   const [weekOffset, setWeekOffset] = useState(0);
   const [busyByDate, setBusyByDate] = useState<BusyByDate>({});
@@ -86,14 +89,14 @@ export function BookingCalendar() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!selected || !duration) return;
+    if (!selected || !duration || !razina) return;
     setSubmitStatus("sending");
     setErrorMsg("");
     try {
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, date: selected.date, time: selected.time, duration }),
+        body: JSON.stringify({ ...form, date: selected.date, time: selected.time, duration, razina }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -103,6 +106,7 @@ export function BookingCalendar() {
       }
       setSubmitStatus("sent");
     } catch {
+
       setErrorMsg("Došlo je do greške. Pokušaj ponovno.");
       setSubmitStatus("error");
     }
@@ -130,7 +134,7 @@ export function BookingCalendar() {
         <p className="text-lg mb-2">Zahtjev je poslan.</p>
         <p className="text-ink-soft text-sm mb-4">
           {formatDay(new Date(selected.date))} u {selected.time}, {duration} min ·{" "}
-          <span className="mono">{priceFor(duration)} €</span>
+          <span className="mono">{priceFor(duration, razina!)} €</span>
           <br />
           Termin je sada označen kao "čeka odobrenje". Javljam se čim ga potvrdim,
           obično unutar 24 sata, na e-mail ili broj koji si ostavila/ostavio.
@@ -156,42 +160,78 @@ export function BookingCalendar() {
         <Step n={3} active={step === 3} done={false} label="Podaci" />
       </div>
 
-      {/* Korak 1: trajanje */}
+      {/* Korak 1: razina i trajanje */}
       {step === 1 && (
         <div className="rounded-2xl border border-line bg-paper-alt p-6 max-w-sm flex flex-col gap-5">
-          <p className="text-sm text-ink-soft">
-            Trajanje termina, po {SLOT_MINUTES} minuta:
-          </p>
-          <div className="flex items-center justify-center gap-6">
-            <button
-              type="button"
-              onClick={() => setDuration((d) => Math.max(MIN_DURATION, d - SLOT_MINUTES))}
-              disabled={duration <= MIN_DURATION}
-              className="h-11 w-11 rounded-full border border-line text-xl hover:border-forest disabled:opacity-30 disabled:hover:border-line"
-              aria-label="Skrati za 15 minuta"
-            >
-              −
-            </button>
-            <div className="text-center min-w-[6rem]">
-              <p className="text-2xl">{duration} min</p>
-              <p className="mono text-sm text-forest">{priceFor(duration)} €</p>
+          <div>
+            <p className="text-sm text-ink-soft mb-3">Razina:</p>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setRazina("osnovna")}
+                className={`rounded-xl border px-4 py-3 text-sm transition-colors ${razina === "osnovna"
+                  ? "border-forest bg-forest text-paper"
+                  : "border-line hover:border-forest"
+                  }`}
+              >
+                Osnovna škola
+                <span className="block mono text-xs opacity-80 mt-1">
+                  {PRICE_PER_SLOT.osnovna} € / 15 min
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setRazina("srednja")}
+                className={`rounded-xl border px-4 py-3 text-sm transition-colors ${razina === "srednja"
+                  ? "border-forest bg-forest text-paper"
+                  : "border-line hover:border-forest"
+                  }`}
+              >
+                Srednja škola i dalje
+                <span className="block mono text-xs opacity-80 mt-1">
+                  {PRICE_PER_SLOT.srednja} € / 15 min
+                </span>
+              </button>
             </div>
-            <button
-              type="button"
-              onClick={() => setDuration((d) => Math.min(MAX_DURATION, d + SLOT_MINUTES))}
-              disabled={duration >= MAX_DURATION}
-              className="h-11 w-11 rounded-full border border-line text-xl hover:border-forest disabled:opacity-30 disabled:hover:border-line"
-              aria-label="Produlji za 15 minuta"
-            >
-              +
-            </button>
           </div>
-          <button
-            onClick={() => setStep(2)}
-            className="rounded-full bg-forest text-paper px-6 py-3 text-sm hover:bg-forest-deep transition-colors"
-          >
-            Dalje — izaberi termin
-          </button>
+
+          {razina && (
+            <>
+              <p className="text-sm text-ink-soft">
+                Trajanje termina, po {SLOT_MINUTES} minuta:
+              </p>
+              <div className="flex items-center justify-center gap-6">
+                <button
+                  type="button"
+                  onClick={() => setDuration((d) => Math.max(MIN_DURATION, d - SLOT_MINUTES))}
+                  disabled={duration <= MIN_DURATION}
+                  className="h-11 w-11 rounded-full border border-line text-xl hover:border-forest disabled:opacity-30 disabled:hover:border-line"
+                  aria-label="Skrati za 15 minuta"
+                >
+                  −
+                </button>
+                <div className="text-center min-w-[6rem]">
+                  <p className="text-2xl">{duration} min</p>
+                  <p className="mono text-sm text-forest">{priceFor(duration, razina)} €</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setDuration((d) => Math.min(MAX_DURATION, d + SLOT_MINUTES))}
+                  disabled={duration >= MAX_DURATION}
+                  className="h-11 w-11 rounded-full border border-line text-xl hover:border-forest disabled:opacity-30 disabled:hover:border-line"
+                  aria-label="Produlji za 15 minuta"
+                >
+                  +
+                </button>
+              </div>
+              <button
+                onClick={() => setStep(2)}
+                className="rounded-full bg-forest text-paper px-6 py-3 text-sm hover:bg-forest-deep transition-colors"
+              >
+                Dalje — izaberi termin
+              </button>
+            </>
+          )}
         </div>
       )}
 
@@ -203,7 +243,7 @@ export function BookingCalendar() {
               onClick={() => setStep(1)}
               className="text-sm text-forest hover:underline"
             >
-              ← Promijeni trajanje ({duration} min · {priceFor(duration)} €)
+              ← Promijeni trajanje ({duration} min · {priceFor(duration, razina!)} €)
             </button>
           </div>
 
@@ -255,15 +295,14 @@ export function BookingCalendar() {
                               setSelected({ date: iso, time });
                               setStep(3);
                             }}
-                            className={`mono text-xs rounded-lg px-2 py-1.5 text-left transition-colors ${
-                              !fits
-                                ? isBusyStart
-                                  ? "bg-line text-ink-soft/60 cursor-not-allowed line-through"
-                                  : "bg-paper text-ink-soft/40 cursor-not-allowed"
-                                : isSelected
+                            className={`mono text-xs rounded-lg px-2 py-1.5 text-left transition-colors ${!fits
+                              ? isBusyStart
+                                ? "bg-line text-ink-soft/60 cursor-not-allowed line-through"
+                                : "bg-paper text-ink-soft/40 cursor-not-allowed"
+                              : isSelected
                                 ? "bg-forest text-paper"
                                 : "bg-paper border border-line hover:border-forest"
-                            }`}
+                              }`}
                             title={!fits ? "Nema dovoljno slobodnog prostora za odabrano trajanje" : "Slobodno"}
                           >
                             {time}
@@ -309,7 +348,7 @@ export function BookingCalendar() {
               </span>
             </p>
             <p className="mono text-sm text-forest mt-1">
-              {duration} min · {priceFor(duration)} €
+              {duration} min · {priceFor(duration, razina!)} €
             </p>
           </div>
 

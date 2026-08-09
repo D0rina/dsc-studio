@@ -30,7 +30,7 @@ export default function OMeni() {
               baza podataka.
             </p>
             <p className="text-ink-soft text-lg">
-              Kroz Nova Znanja taj rad nastavljam izvan učionice — kroz
+              Kroz DSC STUDIO obrt za obrazovanje, proizvodnju i usluge taj rad nastavljam izvan učionice — kroz
               instrukcije, pripremu za maturu i edukacije web dizajna,
               prilagođene svakom učeniku posebno.
             </p>

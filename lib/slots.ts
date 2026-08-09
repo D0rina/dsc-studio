@@ -1,6 +1,5 @@
-// Radno vrijeme po danu u tjednu — uredi po potrebi (0 = nedjelja).
 export const WORKING_HOURS: Record<number, { start: number; end: number } | null> = {
-  0: null, // nedjelja — ne radi se
+  0: null,
   1: { start: 15, end: 20 },
   2: { start: 15, end: 20 },
   3: { start: 15, end: 20 },
@@ -10,14 +9,21 @@ export const WORKING_HOURS: Record<number, { start: number; end: number } | null
 };
 
 export const SLOT_MINUTES = 15;
-export const PRICE_PER_SLOT = 6; // € po 15 minuta
 
-export const MIN_DURATION = 15; // minute
+export type Razina = "osnovna" | "srednja";
+
+export const PRICE_PER_SLOT: Record<Razina, number> = {
+  osnovna: 4, // € po 15 min — osnovna škola
+  srednja: 6, // € po 15 min — srednja škola i dalje
+};
+
+export const MIN_DURATION = 45; // minute — najkraći termin
 export const MAX_DURATION = 180; // minute (3h) — gornja granica za jedan termin
 
-export function priceFor(durationMinutes: number): number {
-  return (durationMinutes / SLOT_MINUTES) * PRICE_PER_SLOT;
+export function priceFor(durationMinutes: number, razina: Razina): number {
+  return (durationMinutes / SLOT_MINUTES) * PRICE_PER_SLOT[razina];
 }
+
 
 function timeToMinutes(t: string): number {
   const [h, m] = t.split(":").map(Number);

@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="border-t border-line mt-24">
       <div className="mx-auto max-w-6xl px-6 py-12 grid gap-8 md:grid-cols-3 text-sm">
         <div>
-          <p className="display italic text-lg text-forest mb-2">Nova Znanja</p>
+          <p className="display italic text-lg text-forest mb-2">DSC STUDIO obrt za obrazovanje, proizvodnju i usluge</p>
           <p className="text-ink-soft max-w-xs">
             Instrukcije, priprema za državnu maturu i edukacije web dizajna —
             uz jasan plan i mjerljiv napredak.
@@ -35,7 +35,7 @@ export function Footer() {
       </div>
       <div className="border-t border-line">
         <p className="mx-auto max-w-6xl px-6 py-4 text-xs text-ink-soft">
-          © {new Date().getFullYear()} Nova Znanja, obrt za obrazovne usluge. Sva prava pridržana.
+          © {new Date().getFullYear()} DSC STUDIO obrt za obrazovanje, proizvodnju i usluge, obrt za obrazovne usluge. Sva prava pridržana.
         </p>
       </div>
     </footer>

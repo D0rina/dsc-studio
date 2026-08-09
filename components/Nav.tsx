@@ -14,7 +14,7 @@ export function Nav() {
     <header className="sticky top-0 z-40 bg-paper/90 backdrop-blur border-b border-line">
       <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
         <Link href="/" className="display italic text-xl text-forest">
-          Nova Znanja
+          DSC STUDIO obrt za obrazovanje, proizvodnju i usluge
         </Link>
         <nav className="hidden lg:flex items-center gap-6 text-sm text-ink-soft">
           {links.map((l) => (

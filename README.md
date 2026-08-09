@@ -1,6 +1,6 @@
-# Nova Znanja — web stranica
+# DSC STUDIO obrt za obrazovanje, proizvodnju i usluge — web stranica
 
-Next.js 16 + Tailwind v4 stranica za obrt "Nova Znanja" (instrukcije, priprema za
+Next.js 16 + Tailwind v4 stranica za obrt "DSC STUDIO obrt za obrazovanje, proizvodnju i usluge" (instrukcije, priprema za
 državnu maturu, edukacije web dizajna).
 
 ## Pokretanje lokalno
@@ -18,7 +18,7 @@ npm run dev
 4. **Tekstovi** — sav sadržaj je smislen placeholder, ali provjeri svaku
    stranicu i prilagodi svom stilu.
 5. **OIB / naziv obrta u footeru** — dodaj pravi naziv obrta kad ga
-   registriraš (npr. "Nova Znanja, obrt za obrazovne usluge, vl. ...").
+   registriraš (npr. "DSC STUDIO obrt za obrazovanje, proizvodnju i usluge, obrt za obrazovne usluge, vl. ...").
 
 ## Deploy
 Isti postupak kao za prethodne projekte: push na GitHub → import u Vercel.
