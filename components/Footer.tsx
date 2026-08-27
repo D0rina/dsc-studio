@@ -27,8 +27,8 @@ export function Footer() {
             Kontakt
           </p>
           <ul className="space-y-2 text-ink-soft">
-            <li>info@novaznanja.hr</li>
-            <li>+385 91 000 0000</li>
+            <li>greguricdoroteja@gmail.com</li>
+            <li>+385 91 9522169</li>
             <li>Rijeka, Hrvatska</li>
           </ul>
         </div>

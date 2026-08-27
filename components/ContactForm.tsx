@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 // Zamijeni ID ispod svojim Formspree endpointom (isti obrazac kao za Ring Ring Kennel).
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/YOUR_FORM_ID";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvkpkzok";
 
 export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(

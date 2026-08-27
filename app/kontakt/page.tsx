@@ -24,13 +24,13 @@ export default function Kontakt() {
                 <p className="mono text-xs uppercase tracking-wide text-forest mb-1">
                   E-mail
                 </p>
-                <p className="text-ink-soft">info@novaznanja.hr</p>
+                <p className="text-ink-soft">greguricdoroteja@gmail.com</p>
               </div>
               <div>
                 <p className="mono text-xs uppercase tracking-wide text-forest mb-1">
                   Telefon
                 </p>
-                <p className="text-ink-soft">+385 91 000 0000</p>
+                <p className="text-ink-soft">+385 91 9522169</p>
               </div>
               <div>
                 <p className="mono text-xs uppercase tracking-wide text-forest mb-1">

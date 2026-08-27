@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { redis, BOOKINGS_KEY } from "@/lib/redis";
-import { occupiedSlots, canFit, priceFor, toISODate, Razina } from "@/lib/slots";
+import { occupiedSlots, canFit, priceFor, Razina } from "@/lib/slots";
 
 export type Booking = {
   id: string;
@@ -61,7 +61,9 @@ export async function POST(req: NextRequest) {
   const busy = busySlotsForDate(all, date);
   const dateObj = new Date(`${date}T00:00:00`);
 
-  if (toISODate(dateObj) !== date || !canFit(dateObj, time, duration, busy)) {
+  const validDateFormat = /^\d{4}-\d{2}-\d{2}$/.test(date);
+
+  if (!validDateFormat || !canFit(dateObj, time, duration, busy)) {
     return NextResponse.json(
       { error: "Taj termin (u cijelom trajanju) nije slobodan. Izaberi drugi." },
       { status: 409 }
@@ -87,6 +89,28 @@ export async function POST(req: NextRequest) {
   };
 
   await redis.set(BOOKINGS_KEY, [...all, booking]);
+
+  // Obavijesti me e-mailom o novom zahtjevu (ne blokira zahtjev ako pukne).
+  try {
+    await fetch(process.env.FORMSPREE_BOOKING_ENDPOINT!, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify({
+        _subject: `Novi zahtjev za termin — ${booking.firstName} ${booking.lastName}`,
+        Ime: `${booking.firstName} ${booking.lastName}`,
+        Telefon: booking.phone,
+        Email: booking.email,
+        Razred: booking.grade,
+        Razina: booking.razina,
+        Predmet: booking.topic,
+        Termin: `${booking.date} u ${booking.time}, ${booking.duration} min`,
+        Cijena: `${booking.price} €`,
+        Poruka: booking.message ?? "—",
+      }),
+    });
+  } catch {
+    // Ne rušimo zahtjev ako slanje e-maila ne uspije — termin je već spremljen.
+  }
 
   return NextResponse.json({ ok: true, booking });
 }
