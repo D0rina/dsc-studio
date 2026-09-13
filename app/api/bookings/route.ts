@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { redis, BOOKINGS_KEY } from "@/lib/redis";
-import { occupiedSlots, canFit, priceFor, Razina } from "@/lib/slots";
+import { priceFor, toISODate, SESSION_MINUTES, Razina, Grupa } from "@/lib/slots";
 
 export type Booking = {
   id: string;
@@ -11,35 +11,24 @@ export type Booking = {
   grade: string; // razred
   topic: string; // gradivo / predmet
   razina: Razina;
+  grupa: Grupa;
   date: string; // YYYY-MM-DD
   time: string; // HH:MM — početak
-  duration: number; // u minutama
-  price: number; // u eurima
+  duration: number; // uvijek 45
+  price: number; // € po osobi
   message?: string;
   status: "pending" | "confirmed" | "rejected";
   createdAt: string;
 };
 
-function busySlotsForDate(all: Booking[], date: string): Set<string> {
-  const set = new Set<string>();
-  for (const b of all) {
-    if (b.date !== date || b.status === "rejected") continue;
-    for (const t of occupiedSlots(b.time, b.duration)) set.add(t);
-  }
-  return set;
-}
-
-// GET — javno: vraća zauzete 15-minutne blokove po danu (bez osobnih podataka),
-// da kalendar zna gdje se odabrano trajanje uopće može smjestiti.
+// GET — javno: vraća zauzete termine po danu (bez osobnih podataka).
 export async function GET() {
   const all = ((await redis.get<Booking[]>(BOOKINGS_KEY)) ?? []) as Booking[];
   const byDate: Record<string, { time: string; status: "pending" | "confirmed" }[]> = {};
   for (const b of all) {
     if (b.status === "rejected") continue;
     byDate[b.date] = byDate[b.date] ?? [];
-    for (const t of occupiedSlots(b.time, b.duration)) {
-      byDate[b.date].push({ time: t, status: b.status });
-    }
+    byDate[b.date].push({ time: b.time, status: b.status });
   }
   return NextResponse.json({ busyByDate: byDate });
 }
@@ -47,25 +36,28 @@ export async function GET() {
 // POST — javno: zahtjev za termin. Uvijek ide u "pending" dok se ne odobri.
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { firstName, lastName, phone, email, grade, topic, date, time, duration, razina, message } =
+  const { firstName, lastName, phone, email, grade, topic, date, time, razina, grupa, message } =
     body ?? {};
 
   if (
     !firstName || !lastName || !phone || !email || !grade || !topic ||
-    !date || !time || !duration || !razina
+    !date || !time || !razina || !grupa
   ) {
     return NextResponse.json({ error: "Nedostaju podaci." }, { status: 400 });
   }
 
-  const all = ((await redis.get<Booking[]>(BOOKINGS_KEY)) ?? []) as Booking[];
-  const busy = busySlotsForDate(all, date);
-  const dateObj = new Date(`${date}T00:00:00`);
-
   const validDateFormat = /^\d{4}-\d{2}-\d{2}$/.test(date);
+  if (!validDateFormat) {
+    return NextResponse.json({ error: "Neispravan datum." }, { status: 400 });
+  }
 
-  if (!validDateFormat || !canFit(dateObj, time, duration, busy)) {
+  const all = ((await redis.get<Booking[]>(BOOKINGS_KEY)) ?? []) as Booking[];
+  const alreadyTaken = all.some(
+    (b) => b.date === date && b.time === time && b.status !== "rejected"
+  );
+  if (alreadyTaken) {
     return NextResponse.json(
-      { error: "Taj termin (u cijelom trajanju) nije slobodan. Izaberi drugi." },
+      { error: "Taj termin je već zauzet ili čeka odobrenje. Izaberi drugi." },
       { status: 409 }
     );
   }
@@ -79,10 +71,11 @@ export async function POST(req: NextRequest) {
     grade,
     topic,
     razina,
+    grupa,
     date,
     time,
-    duration,
-    price: priceFor(duration, razina),
+    duration: SESSION_MINUTES,
+    price: priceFor(razina, grupa),
     message,
     status: "pending",
     createdAt: new Date().toISOString(),
@@ -90,7 +83,6 @@ export async function POST(req: NextRequest) {
 
   await redis.set(BOOKINGS_KEY, [...all, booking]);
 
-  // Obavijesti me e-mailom o novom zahtjevu (ne blokira zahtjev ako pukne).
   try {
     await fetch(process.env.FORMSPREE_BOOKING_ENDPOINT!, {
       method: "POST",
@@ -102,14 +94,15 @@ export async function POST(req: NextRequest) {
         Email: booking.email,
         Razred: booking.grade,
         Razina: booking.razina,
+        Grupa: booking.grupa,
         Predmet: booking.topic,
         Termin: `${booking.date} u ${booking.time}, ${booking.duration} min`,
-        Cijena: `${booking.price} €`,
+        Cijena: `${booking.price} € po osobi`,
         Poruka: booking.message ?? "—",
       }),
     });
   } catch {
-    // Ne rušimo zahtjev ako slanje e-maila ne uspije — termin je već spremljen.
+    // Ne rušimo zahtjev ako slanje e-maila ne uspije.
   }
 
   return NextResponse.json({ ok: true, booking });

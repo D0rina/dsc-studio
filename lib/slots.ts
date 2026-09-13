@@ -1,5 +1,6 @@
+// Radno vrijeme po danu u tjednu — uredi po potrebi (0 = nedjelja).
 export const WORKING_HOURS: Record<number, { start: number; end: number } | null> = {
-  0: null,
+  0: { start: 15, end: 20 },
   1: { start: 15, end: 20 },
   2: { start: 15, end: 20 },
   3: { start: 15, end: 20 },
@@ -8,26 +9,25 @@ export const WORKING_HOURS: Record<number, { start: number; end: number } | null
   6: { start: 10, end: 14 },
 };
 
-export const SLOT_MINUTES = 15;
+export const SESSION_MINUTES = 45; // jedan "školski sat" — fiksno trajanje termina
 
 export type Razina = "osnovna" | "srednja";
+export type Grupa = "1" | "2" | "3+";
 
-export const PRICE_PER_SLOT: Record<Razina, number> = {
-  osnovna: 4, // € po 15 min — osnovna škola
-  srednja: 6, // € po 15 min — srednja škola i dalje
+export const GRUPA_LABEL: Record<Grupa, string> = {
+  "1": "1 osoba",
+  "2": "2 osobe",
+  "3+": "3+ osobe",
 };
 
-export const MIN_DURATION = 45; // minute — najkraći termin
-export const MAX_DURATION = 180; // minute (3h) — gornja granica za jedan termin
+// € po osobi, po jednom školskom satu (45 min)
+export const PRICE_PER_SESSION: Record<Razina, Record<Grupa, number>> = {
+  osnovna: { "1": 14, "2": 12, "3+": 10 },
+  srednja: { "1": 16, "2": 14, "3+": 12 },
+};
 
-export function priceFor(durationMinutes: number, razina: Razina): number {
-  return (durationMinutes / SLOT_MINUTES) * PRICE_PER_SLOT[razina];
-}
-
-
-function timeToMinutes(t: string): number {
-  const [h, m] = t.split(":").map(Number);
-  return h * 60 + m;
+export function priceFor(razina: Razina, grupa: Grupa): number {
+  return PRICE_PER_SESSION[razina][grupa];
 }
 
 function minutesToTime(mins: number): string {
@@ -36,35 +36,16 @@ function minutesToTime(mins: number): string {
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
 
-// Svi mogući 15-minutni termini početka unutar radnog vremena danog dana.
+// Svi mogući termini početka (svaki 45 min) unutar radnog vremena danog dana.
 export function slotsForDate(date: Date): string[] {
   const hours = WORKING_HOURS[date.getDay()];
   if (!hours) return [];
   const out: string[] = [];
-  for (let m = hours.start * 60; m < hours.end * 60; m += SLOT_MINUTES) {
+  const endMinutes = hours.end * 60;
+  for (let m = hours.start * 60; m + SESSION_MINUTES <= endMinutes; m += SESSION_MINUTES) {
     out.push(minutesToTime(m));
   }
   return out;
-}
-
-// Lista 15-minutnih blokova koje zauzima termin zadanog trajanja od "time".
-export function occupiedSlots(time: string, durationMinutes: number): string[] {
-  const start = timeToMinutes(time);
-  const count = durationMinutes / SLOT_MINUTES;
-  return Array.from({ length: count }, (_, i) => minutesToTime(start + i * SLOT_MINUTES));
-}
-
-// Je li moguće smjestiti termin od "time" u trajanju durationMinutes unutar
-// radnog vremena tog dana i bez preklapanja sa zauzetim/pending terminima.
-export function canFit(
-  date: Date,
-  time: string,
-  durationMinutes: number,
-  busySlots: Set<string>
-): boolean {
-  const available = new Set(slotsForDate(date));
-  const needed = occupiedSlots(time, durationMinutes);
-  return needed.every((t) => available.has(t) && !busySlots.has(t));
 }
 
 export function toISODate(d: Date): string {

@@ -2,44 +2,21 @@ import Link from "next/link";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 
-const plans = [
-  {
-    title: "Pojedinačni sat",
-    price: "20 €",
-    unit: "/ sat",
-    desc: "Za povremenu pomoć oko gradiva ili konkretnog zadatka.",
-    features: ["60 minuta", "Online ili uživo", "Bez obveze paketa"],
-  },
-  {
-    title: "Paket priprema",
-    price: "18 €",
-    unit: "/ sat",
-    desc: "Za kontinuiran rad kroz cijelo polugodište ili do mature.",
-    features: [
-      "8 ili 12 sati unaprijed",
-      "Plan rada po tjednima",
-      "Probni testovi uključeni",
-    ],
-    featured: true,
-  },
-  {
-    title: "Edukacija web dizajna",
-    price: "150 €",
-    unit: "/ tečaj",
-    desc: "Cjelovita edukacija u više termina, sa stvarnim projektom.",
-    features: ["6 susreta", "Materijali uključeni", "Gotova osobna stranica"],
-  },
-  {
-    title: "Lektoriranje i oblikovanje",
-    price: "4 €",
-    unit: "/ kartica",
-    desc: "Lektura, korektura i oblikovanje seminarskih i maturalnih radova.",
-    features: [
-      "Kartica = 1800 znakova s razmacima",
-      "Provjera pravopisa, gramatike i stila",
-      "Strukturiranje i usklađivanje s uputama",
-    ],
-  },
+const instrukcije = [
+  { grupa: "1 osoba", osnovna: "14 €", srednja: "16 €" },
+  { grupa: "2 osobe", osnovna: "12 €", srednja: "14 €" },
+  { grupa: "3+ osobe", osnovna: "10 €", srednja: "12 €" },
+];
+
+const matura = [
+  { grupa: "1 osoba", cijena: "480 €" },
+  { grupa: "2 osobe", cijena: "350 €" },
+  { grupa: "3+ osobe", cijena: "270 €" },
+];
+
+const tekstovi = [
+  { usluga: "Pisanje i uređivanje teksta", cijena: "10 € po kartici" },
+  { usluga: "Lektura i korektura teksta", cijena: "8 € po kartici" },
 ];
 
 export default function Cjenik() {
@@ -55,60 +32,92 @@ export default function Cjenik() {
             Transparentne cijene, bez skrivenih troškova.
           </h1>
           <p className="text-ink-soft max-w-xl text-lg">
-            Orijentacijske cijene niže — konačna ponuda ovisi o razini,
-            učestalosti i broju termina. Cijene su okvirne i mogu se
-            prilagoditi nakon uvodnog razgovora.
+            Cijene za grupe su po osobi, ne za cijelu grupu — svatko plaća
+            svoj dio. Konačna ponuda može se prilagoditi nakon uvodnog
+            razgovora.
           </p>
         </section>
 
-        <section className="mx-auto max-w-6xl px-6 pb-24 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {plans.map((p) => (
-            <div
-              key={p.title}
-              className={`rounded-3xl p-8 flex flex-col border ${
-                p.featured
-                  ? "bg-forest text-paper border-forest"
-                  : "bg-paper-alt border-line"
-              }`}
-            >
-              <h2 className="text-xl mb-1">{p.title}</h2>
-              <p
-                className={`text-sm mb-6 ${
-                  p.featured ? "text-paper/75" : "text-ink-soft"
-                }`}
-              >
-                {p.desc}
-              </p>
-              <p className="mono text-3xl mb-6">
-                {p.price}
-                <span className="text-sm opacity-70">{p.unit}</span>
-              </p>
-              <div className="flex flex-col gap-2 flex-1">
-                {p.features.map((f) => (
-                  <div key={f} className="flex gap-2 items-start text-sm">
-                    <span
-                      className={`mt-1.5 h-1 w-1 rounded-full shrink-0 ${
-                        p.featured ? "bg-gold" : "bg-forest"
-                      }`}
-                    />
-                    <span className={p.featured ? "text-paper/90" : "text-ink-soft"}>
-                      {f}
-                    </span>
-                  </div>
+        <section className="mx-auto max-w-6xl px-6 pb-16">
+          <h2 className="text-2xl mb-2">Instrukcije</h2>
+          <p className="text-ink-soft text-sm mb-6">Cijena po osobi, za jedan školski sat (45 min)</p>
+          <div className="overflow-x-auto rounded-2xl border border-line">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-paper-alt text-left">
+                  <th className="px-5 py-3 font-normal text-ink-soft">Veličina grupe</th>
+                  <th className="px-5 py-3 font-normal text-ink-soft">Osnovna škola</th>
+                  <th className="px-5 py-3 font-normal text-ink-soft">Srednja škola i dalje</th>
+                </tr>
+              </thead>
+              <tbody>
+                {instrukcije.map((row) => (
+                  <tr key={row.grupa} className="border-t border-line">
+                    <td className="px-5 py-3">{row.grupa}</td>
+                    <td className="px-5 py-3 mono text-forest">{row.osnovna}</td>
+                    <td className="px-5 py-3 mono text-forest">{row.srednja}</td>
+                  </tr>
                 ))}
-              </div>
-              <Link
-                href="/kontakt"
-                className={`mt-8 text-center rounded-full px-5 py-3 text-sm transition-colors ${
-                  p.featured
-                    ? "bg-gold text-forest-deep hover:brightness-95"
-                    : "border border-line hover:border-forest hover:text-forest"
-                }`}
-              >
-                Zatraži ponudu
-              </Link>
-            </div>
-          ))}
+              </tbody>
+            </table>
+          </div>
+          <Link href="/termini" className="inline-block mt-4 text-sm text-forest hover:underline">
+            Zatraži termin →
+          </Link>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-6 pb-16">
+          <h2 className="text-2xl mb-2">Priprema za državnu maturu</h2>
+          <p className="text-ink-soft text-sm mb-6">Cijena po osobi, paket od 40 školskih sati</p>
+          <div className="overflow-x-auto rounded-2xl border border-line">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-paper-alt text-left">
+                  <th className="px-5 py-3 font-normal text-ink-soft">Veličina grupe</th>
+                  <th className="px-5 py-3 font-normal text-ink-soft">Cijena (40 sati)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {matura.map((row) => (
+                  <tr key={row.grupa} className="border-t border-line">
+                    <td className="px-5 py-3">{row.grupa}</td>
+                    <td className="px-5 py-3 mono text-forest">{row.cijena}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Link href="/kontakt" className="inline-block mt-4 text-sm text-forest hover:underline">
+            Javi se za dogovor →
+          </Link>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-6 pb-24">
+          <h2 className="text-2xl mb-2">Pisanje i lektura tekstova</h2>
+          <p className="text-ink-soft text-sm mb-6">
+            Kartica = 1800 znakova s razmacima
+          </p>
+          <div className="overflow-x-auto rounded-2xl border border-line">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-paper-alt text-left">
+                  <th className="px-5 py-3 font-normal text-ink-soft">Usluga</th>
+                  <th className="px-5 py-3 font-normal text-ink-soft">Cijena</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tekstovi.map((row) => (
+                  <tr key={row.usluga} className="border-t border-line">
+                    <td className="px-5 py-3">{row.usluga}</td>
+                    <td className="px-5 py-3 mono text-forest">{row.cijena}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Link href="/kontakt" className="inline-block mt-4 text-sm text-forest hover:underline">
+            Javi se za dogovor →
+          </Link>
         </section>
       </main>
       <Footer />

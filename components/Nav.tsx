@@ -13,8 +13,11 @@ export function Nav() {
   return (
     <header className="sticky top-0 z-40 bg-paper/90 backdrop-blur border-b border-line">
       <div className="mx-auto max-w-6xl px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="display italic text-xl text-forest">
-          DSC STUDIO obrt za obrazovanje, proizvodnju i usluge
+        <Link href="/" className="flex items-center gap-2">
+          <img src="/logo.png" alt="DSC STUDIO" className="h-10 w-10 rounded-full" />
+          <span className="display italic text-lg text-forest hidden sm:inline">
+            DSC STUDIO
+          </span>
         </Link>
         <nav className="hidden lg:flex items-center gap-6 text-sm text-ink-soft">
           {links.map((l) => (

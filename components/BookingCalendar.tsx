@@ -3,16 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   slotsForDate,
-  occupiedSlots,
   toISODate,
   formatWeekday,
   formatDay,
-  MIN_DURATION,
-  MAX_DURATION,
-  SLOT_MINUTES,
-  PRICE_PER_SLOT,
   priceFor,
   Razina,
+  Grupa,
+  GRUPA_LABEL,
+  SESSION_MINUTES,
 } from "@/lib/slots";
 
 type BusyByDate = Record<string, { time: string; status: "pending" | "confirmed" }[]>;
@@ -30,6 +28,8 @@ const GRADES = [
   "Odrasla osoba",
 ];
 
+const GRUPE: Grupa[] = ["1", "2", "3+"];
+
 function getWeekDays(offsetWeeks: number): Date[] {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -45,7 +45,7 @@ function getWeekDays(offsetWeeks: number): Date[] {
 export function BookingCalendar() {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [razina, setRazina] = useState<Razina | null>(null);
-  const [duration, setDuration] = useState<number>(MIN_DURATION);
+  const [grupa, setGrupa] = useState<Grupa | null>(null);
   const [weekOffset, setWeekOffset] = useState(0);
   const [busyByDate, setBusyByDate] = useState<BusyByDate>({});
   const [loading, setLoading] = useState(true);
@@ -78,25 +78,16 @@ export function BookingCalendar() {
     return new Set((busyByDate[iso] ?? []).map((b) => b.time));
   }
 
-  function canStartHere(date: Date, time: string): boolean {
-    if (!duration) return false;
-    const iso = toISODate(date);
-    const available = new Set(slotsForDate(date));
-    const busy = busySetFor(iso);
-    const needed = occupiedSlots(time, duration);
-    return needed.every((t) => available.has(t) && !busy.has(t));
-  }
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!selected || !duration || !razina) return;
+    if (!selected || !razina || !grupa) return;
     setSubmitStatus("sending");
     setErrorMsg("");
     try {
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, date: selected.date, time: selected.time, duration, razina }),
+        body: JSON.stringify({ ...form, date: selected.date, time: selected.time, razina, grupa }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -106,7 +97,6 @@ export function BookingCalendar() {
       }
       setSubmitStatus("sent");
     } catch {
-
       setErrorMsg("Došlo je do greške. Pokušaj ponovno.");
       setSubmitStatus("error");
     }
@@ -114,7 +104,6 @@ export function BookingCalendar() {
 
   function resetAll() {
     setStep(1);
-    setDuration(MIN_DURATION);
     setSelected(null);
     setSubmitStatus("idle");
     setForm({
@@ -128,13 +117,13 @@ export function BookingCalendar() {
     });
   }
 
-  if (submitStatus === "sent" && selected && duration) {
+  if (submitStatus === "sent" && selected && razina && grupa) {
     return (
       <div className="rounded-3xl border border-line bg-paper-alt p-8 max-w-lg">
         <p className="text-lg mb-2">Zahtjev je poslan.</p>
         <p className="text-ink-soft text-sm mb-4">
-          {formatDay(new Date(selected.date))} u {selected.time}, {duration} min ·{" "}
-          <span className="mono">{priceFor(duration, razina!)} €</span>
+          {formatDay(new Date(selected.date))} u {selected.time}, {SESSION_MINUTES} min ·{" "}
+          <span className="mono">{priceFor(razina, grupa)} € po osobi</span>
           <br />
           Termin je sada označen kao "čeka odobrenje". Javljam se čim ga potvrdim,
           obično unutar 24 sata, na e-mail ili broj koji si ostavila/ostavio.
@@ -153,14 +142,14 @@ export function BookingCalendar() {
     <div className="flex flex-col gap-8">
       {/* Koraci */}
       <div className="flex items-center gap-2 mono text-xs text-ink-soft">
-        <Step n={1} active={step === 1} done={step > 1} label="Trajanje" />
+        <Step n={1} active={step === 1} done={step > 1} label="Razina i grupa" />
         <span>—</span>
         <Step n={2} active={step === 2} done={step > 2} label="Termin" />
         <span>—</span>
         <Step n={3} active={step === 3} done={false} label="Podaci" />
       </div>
 
-      {/* Korak 1: razina i trajanje */}
+      {/* Korak 1: razina i veličina grupe */}
       {step === 1 && (
         <div className="rounded-2xl border border-line bg-paper-alt p-6 max-w-sm flex flex-col gap-5">
           <div>
@@ -170,59 +159,49 @@ export function BookingCalendar() {
                 type="button"
                 onClick={() => setRazina("osnovna")}
                 className={`rounded-xl border px-4 py-3 text-sm transition-colors ${razina === "osnovna"
-                  ? "border-forest bg-forest text-paper"
-                  : "border-line hover:border-forest"
+                    ? "border-forest bg-forest text-paper"
+                    : "border-line hover:border-forest"
                   }`}
               >
                 Osnovna škola
-                <span className="block mono text-xs opacity-80 mt-1">
-                  {PRICE_PER_SLOT.osnovna} € / 15 min
-                </span>
               </button>
               <button
                 type="button"
                 onClick={() => setRazina("srednja")}
                 className={`rounded-xl border px-4 py-3 text-sm transition-colors ${razina === "srednja"
-                  ? "border-forest bg-forest text-paper"
-                  : "border-line hover:border-forest"
+                    ? "border-forest bg-forest text-paper"
+                    : "border-line hover:border-forest"
                   }`}
               >
                 Srednja škola i dalje
-                <span className="block mono text-xs opacity-80 mt-1">
-                  {PRICE_PER_SLOT.srednja} € / 15 min
-                </span>
               </button>
             </div>
           </div>
 
-          {razina && (
+          <div>
+            <p className="text-sm text-ink-soft mb-3">Veličina grupe:</p>
+            <div className="grid grid-cols-3 gap-3">
+              {GRUPE.map((g) => (
+                <button
+                  key={g}
+                  type="button"
+                  onClick={() => setGrupa(g)}
+                  className={`rounded-xl border px-3 py-3 text-sm transition-colors ${grupa === g
+                      ? "border-forest bg-forest text-paper"
+                      : "border-line hover:border-forest"
+                    }`}
+                >
+                  {GRUPA_LABEL[g]}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {razina && grupa && (
             <>
-              <p className="text-sm text-ink-soft">
-                Trajanje termina, po {SLOT_MINUTES} minuta:
-              </p>
-              <div className="flex items-center justify-center gap-6">
-                <button
-                  type="button"
-                  onClick={() => setDuration((d) => Math.max(MIN_DURATION, d - SLOT_MINUTES))}
-                  disabled={duration <= MIN_DURATION}
-                  className="h-11 w-11 rounded-full border border-line text-xl hover:border-forest disabled:opacity-30 disabled:hover:border-line"
-                  aria-label="Skrati za 15 minuta"
-                >
-                  −
-                </button>
-                <div className="text-center min-w-[6rem]">
-                  <p className="text-2xl">{duration} min</p>
-                  <p className="mono text-sm text-forest">{priceFor(duration, razina)} €</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setDuration((d) => Math.min(MAX_DURATION, d + SLOT_MINUTES))}
-                  disabled={duration >= MAX_DURATION}
-                  className="h-11 w-11 rounded-full border border-line text-xl hover:border-forest disabled:opacity-30 disabled:hover:border-line"
-                  aria-label="Produlji za 15 minuta"
-                >
-                  +
-                </button>
+              <div className="rounded-xl bg-paper border border-line px-4 py-3 text-center">
+                <p className="mono text-lg text-forest">{priceFor(razina, grupa)} € po osobi</p>
+                <p className="text-xs text-ink-soft mt-1">za jedan školski sat (45 min)</p>
               </div>
               <button
                 onClick={() => setStep(2)}
@@ -236,14 +215,14 @@ export function BookingCalendar() {
       )}
 
       {/* Korak 2: termin */}
-      {step === 2 && duration && (
+      {step === 2 && razina && grupa && (
         <div className="flex flex-col gap-6">
           <div className="flex items-center justify-between">
             <button
               onClick={() => setStep(1)}
               className="text-sm text-forest hover:underline"
             >
-              ← Promijeni trajanje ({duration} min · {priceFor(duration, razina!)} €)
+              ← Promijeni razinu/grupu ({priceFor(razina, grupa)} € po osobi)
             </button>
           </div>
 
@@ -279,31 +258,28 @@ export function BookingCalendar() {
                   <div key={iso} className="rounded-2xl border border-line bg-paper-alt p-3">
                     <p className="text-sm capitalize mb-1">{formatWeekday(d)}</p>
                     <p className="mono text-xs text-ink-soft mb-3">{formatDay(d)}</p>
-                    <div className="flex flex-col gap-1.5 max-h-64 overflow-y-auto pr-1">
+                    <div className="flex flex-col gap-1.5">
                       {allSlots.length === 0 && (
                         <p className="text-xs text-ink-soft">Ne radi se</p>
                       )}
                       {allSlots.map((time) => {
-                        const fits = canStartHere(d, time);
-                        const isBusyStart = busy.has(time);
+                        const isBusy = busy.has(time);
                         const isSelected = selected?.date === iso && selected?.time === time;
                         return (
                           <button
                             key={time}
-                            disabled={!fits}
+                            disabled={isBusy}
                             onClick={() => {
                               setSelected({ date: iso, time });
                               setStep(3);
                             }}
-                            className={`mono text-xs rounded-lg px-2 py-1.5 text-left transition-colors ${!fits
-                              ? isBusyStart
+                            className={`mono text-xs rounded-lg px-2 py-1.5 text-left transition-colors ${isBusy
                                 ? "bg-line text-ink-soft/60 cursor-not-allowed line-through"
-                                : "bg-paper text-ink-soft/40 cursor-not-allowed"
-                              : isSelected
-                                ? "bg-forest text-paper"
-                                : "bg-paper border border-line hover:border-forest"
+                                : isSelected
+                                  ? "bg-forest text-paper"
+                                  : "bg-paper border border-line hover:border-forest"
                               }`}
-                            title={!fits ? "Nema dovoljno slobodnog prostora za odabrano trajanje" : "Slobodno"}
+                            title={isBusy ? "Zauzeto" : "Slobodno"}
                           >
                             {time}
                           </button>
@@ -321,14 +297,14 @@ export function BookingCalendar() {
               <span className="h-3 w-3 rounded bg-paper border border-line inline-block" /> Slobodno
             </span>
             <span className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded bg-line inline-block" /> Zauzeto / prekratko za trajanje
+              <span className="h-3 w-3 rounded bg-line inline-block" /> Zauzeto
             </span>
           </div>
         </div>
       )}
 
       {/* Korak 3: podaci */}
-      {step === 3 && selected && duration && (
+      {step === 3 && selected && razina && grupa && (
         <form
           onSubmit={handleSubmit}
           className="rounded-3xl border border-line bg-paper-alt p-8 flex flex-col gap-5 max-w-lg"
@@ -348,7 +324,7 @@ export function BookingCalendar() {
               </span>
             </p>
             <p className="mono text-sm text-forest mt-1">
-              {duration} min · {priceFor(duration, razina!)} €
+              {SESSION_MINUTES} min · {priceFor(razina, grupa)} € po osobi ({GRUPA_LABEL[grupa]})
             </p>
           </div>
 

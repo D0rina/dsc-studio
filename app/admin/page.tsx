@@ -180,10 +180,14 @@ function BookingRow({ b, children }: { b: Booking; children: React.ReactNode }) 
     <div className="rounded-2xl border border-line bg-paper-alt p-4 flex flex-wrap items-center justify-between gap-3">
       <div className="text-sm">
         <p>
-          <span className="mono">{b.date} · {b.time}</span> — {b.service}
+          <span className="mono">{b.date} · {b.time}</span> — {b.razina}, {b.grupa} ·{" "}
+          <span className="mono">{b.price} € po osobi</span>
+        </p>
+        <p>
+          {b.firstName} {b.lastName} · {b.grade} · {b.topic}
         </p>
         <p className="text-ink-soft">
-          {b.name} · {b.contact}
+          {b.phone} · {b.email}
         </p>
         {b.message && <p className="text-ink-soft italic mt-1">"{b.message}"</p>}
       </div>
