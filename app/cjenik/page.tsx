@@ -3,20 +3,26 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 
 const instrukcije = [
-  { grupa: "1 osoba", osnovna: "14 €", srednja: "16 €" },
-  { grupa: "2 osobe", osnovna: "12 €", srednja: "14 €" },
-  { grupa: "3+ osobe", osnovna: "10 €", srednja: "12 €" },
+  { grupa: "1 polaznik", osnovna: "15 €", srednja: "17 €" },
+  { grupa: "2 polaznika", osnovna: "12 €", srednja: "14 €" },
+  { grupa: "3+ polaznika", osnovna: "10 €", srednja: "12 €" },
 ];
 
 const matura = [
-  { grupa: "1 osoba", cijena: "480 €" },
-  { grupa: "2 osobe", cijena: "350 €" },
-  { grupa: "3+ osobe", cijena: "270 €" },
+  { grupa: "1 polaznik", cijena: "480 €" },
+  { grupa: "2 polaznika", cijena: "350 €" },
+  { grupa: "3+ polaznika", cijena: "270 €" },
 ];
 
 const tekstovi = [
-  { usluga: "Pisanje i uređivanje teksta", cijena: "10 € po kartici" },
-  { usluga: "Lektura i korektura teksta", cijena: "8 € po kartici" },
+  { usluga: "Pisanje i uređivanje teksta", jedinica: "kartica teksta", cijena: "10 €" },
+  { usluga: "Lektura i korektura teksta", jedinica: "kartica teksta", cijena: "8 €" },
+  { usluga: "Izrada nastavnih materijala", jedinica: "po komadu", cijena: "20 €" },
+  {
+    usluga: "Izrada edukativnih materijala po narudžbi",
+    jedinica: "po komadu",
+    cijena: "30 €",
+  },
 ];
 
 export default function Cjenik() {
@@ -26,28 +32,32 @@ export default function Cjenik() {
       <main>
         <section className="mx-auto max-w-6xl px-6 pt-16 pb-10">
           <p className="mono text-xs uppercase tracking-widest text-forest mb-4">
-            Cjenik
+            Cjenik usluga
           </p>
           <h1 className="text-4xl md:text-5xl max-w-2xl mb-4">
             Transparentne cijene, bez skrivenih troškova.
           </h1>
-          <p className="text-ink-soft max-w-xl text-lg">
+          <p className="text-ink-soft max-w-xl text-lg mb-3">
             Cijene za grupe su po osobi, ne za cijelu grupu — svatko plaća
-            svoj dio. Konačna ponuda može se prilagoditi nakon uvodnog
-            razgovora.
+            svoj dio.
+          </p>
+          <p className="mono text-xs text-ink-soft">
+            Cijene vrijede od 10. 9. 2026.
           </p>
         </section>
 
         <section className="mx-auto max-w-6xl px-6 pb-16">
           <h2 className="text-2xl mb-2">Instrukcije</h2>
-          <p className="text-ink-soft text-sm mb-6">Cijena po osobi, za jedan školski sat (45 min)</p>
+          <p className="text-ink-soft text-sm mb-6">
+            Cijena po polazniku, 45 min termin
+          </p>
           <div className="overflow-x-auto rounded-2xl border border-line">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-paper-alt text-left">
                   <th className="px-5 py-3 font-normal text-ink-soft">Veličina grupe</th>
                   <th className="px-5 py-3 font-normal text-ink-soft">Osnovna škola</th>
-                  <th className="px-5 py-3 font-normal text-ink-soft">Srednja škola i dalje</th>
+                  <th className="px-5 py-3 font-normal text-ink-soft">Srednja škola</th>
                 </tr>
               </thead>
               <tbody>
@@ -67,14 +77,16 @@ export default function Cjenik() {
         </section>
 
         <section className="mx-auto max-w-6xl px-6 pb-16">
-          <h2 className="text-2xl mb-2">Priprema za državnu maturu</h2>
-          <p className="text-ink-soft text-sm mb-6">Cijena po osobi, paket od 40 školskih sati</p>
+          <h2 className="text-2xl mb-2">Priprema za maturu</h2>
+          <p className="text-ink-soft text-sm mb-6">
+            Paket pripreme: 20 termina × 90 min, cijena po polazniku
+          </p>
           <div className="overflow-x-auto rounded-2xl border border-line">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-paper-alt text-left">
                   <th className="px-5 py-3 font-normal text-ink-soft">Veličina grupe</th>
-                  <th className="px-5 py-3 font-normal text-ink-soft">Cijena (40 sati)</th>
+                  <th className="px-5 py-3 font-normal text-ink-soft">Cijena paketa</th>
                 </tr>
               </thead>
               <tbody>
@@ -93,15 +105,16 @@ export default function Cjenik() {
         </section>
 
         <section className="mx-auto max-w-6xl px-6 pb-24">
-          <h2 className="text-2xl mb-2">Pisanje i lektura tekstova</h2>
+          <h2 className="text-2xl mb-2">Pisanje radova</h2>
           <p className="text-ink-soft text-sm mb-6">
-            Kartica = 1800 znakova s razmacima
+            Usluge pisanja i uređivanja. Kartica = 1800 znakova s razmacima.
           </p>
           <div className="overflow-x-auto rounded-2xl border border-line">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-paper-alt text-left">
                   <th className="px-5 py-3 font-normal text-ink-soft">Usluga</th>
+                  <th className="px-5 py-3 font-normal text-ink-soft">Jedinica</th>
                   <th className="px-5 py-3 font-normal text-ink-soft">Cijena</th>
                 </tr>
               </thead>
@@ -109,6 +122,7 @@ export default function Cjenik() {
                 {tekstovi.map((row) => (
                   <tr key={row.usluga} className="border-t border-line">
                     <td className="px-5 py-3">{row.usluga}</td>
+                    <td className="px-5 py-3 text-ink-soft">{row.jedinica}</td>
                     <td className="px-5 py-3 mono text-forest">{row.cijena}</td>
                   </tr>
                 ))}

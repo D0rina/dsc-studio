@@ -22,8 +22,8 @@ export const GRUPA_LABEL: Record<Grupa, string> = {
 
 // € po osobi, po jednom školskom satu (45 min)
 export const PRICE_PER_SESSION: Record<Razina, Record<Grupa, number>> = {
-  osnovna: { "1": 14, "2": 12, "3+": 10 },
-  srednja: { "1": 16, "2": 14, "3+": 12 },
+  osnovna: { "1": 15, "2": 12, "3+": 10 },
+  srednja: { "1": 17, "2": 14, "3+": 12 },
 };
 
 export function priceFor(razina: Razina, grupa: Grupa): number {
