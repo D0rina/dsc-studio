@@ -59,7 +59,7 @@ export default function Home() {
               <span className="mark">znanja</span> koje se vidi u ocjeni.
             </h1>
             <p className="text-ink-soft text-lg mb-8 max-w-md">
-             DSC STUDIO je obrt za obrazovanje, izradu i savjetovanje — ova
+              DSC STUDIO je obrt za obrazovanje, izradu i savjetovanje — ova
               stranica pokriva instrukcije, edukacije i pisanje radova, uz
               jasan plan kako doći do cilja, korak po korak.
             </p>
@@ -88,7 +88,7 @@ export default function Home() {
             <h2 className="text-2xl md:text-3xl mb-10 max-w-xl">
               Tri načina da napredujemo zajedno
             </h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((s) => (
                 <div
                   key={s.title}

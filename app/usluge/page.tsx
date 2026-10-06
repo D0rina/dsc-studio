@@ -27,18 +27,7 @@ const groups = [
       "Fokus na teme koje najčešće nose bodove",
     ],
   },
-  {
-    id: "web-dizajn",
-    tag: "Web",
-    title: "Edukacije web dizajna",
-    lead:
-      "Od osnova HTML-a i CSS-a do izrade prve prave stranice — za srednjoškolce, studente i odrasle.",
-    points: [
-      "Postupno gradivo: struktura, stil, responzivnost",
-      "Rad na stvarnom projektu tijekom edukacije",
-      "Uvod u moderne alate i objavu stranice na webu",
-    ],
-  },
+
   {
     id: "pisanje-radova",
     tag: "Tekst",
