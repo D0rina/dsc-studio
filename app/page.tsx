@@ -53,20 +53,23 @@ export default function Home() {
         <section className="mx-auto max-w-6xl px-6 pt-16 pb-20 md:pt-24 md:pb-28 grid md:grid-cols-2 gap-12 items-center">
           <div className="reveal">
 
-            <h1 className="text-4xl md:text-5xl leading-tight mb-6">
-              Od <span className="mark">nesigurnosti</span> do{" "}
-              <span className="mark">znanja</span> koje se vidi u ocjeni.
-            </h1>
-
             <p className="mono text-xs uppercase tracking-widest text-forest mb-4">
               Instrukcije · Pripreme za maturu · Web dizajn
             </p>
-            Znanje s <span className="...ista klasa kao sada...">planom</span>.
             <br />
-            Rezultati s <span className="...ista klasa kao sada...">razlogom</span>.
+            <br />
+
+            <h1 className="...ostaju iste klase...">
+              Znanje s <span className="...ista klasa kao sada...">planom</span>.
+              <br />
+              Rezultati s <span className="...ista klasa kao sada...">razlogom</span>.
+            </h1>
+
+            <br />
+            <br />
 
             <p className="text-ink-soft text-lg mb-8 max-w-md">
-              DSC STUDIO je obrt za obrazovanje, proizvodnju i usluge <br />
+
               Područje djelovanja obrta čine instrukcije, edukacije i pomoć u učenju,
               uz jasan plan kako doći do cilja – korak po korak.
 

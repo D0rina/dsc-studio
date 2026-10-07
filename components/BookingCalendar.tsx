@@ -1,5 +1,5 @@
 "use client";
-
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import {
   slotsForDate,
@@ -431,7 +431,7 @@ export function BookingCalendar() {
             <Link href="/privatnost" className="text-forest hover:underline">
               Obavijest o privatnosti
             </Link>
-
+            .
           </p>
         </form>
       )}
