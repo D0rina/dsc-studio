@@ -52,29 +52,29 @@ export default function Home() {
       <main>
         <section className="mx-auto max-w-6xl px-6 pt-16 pb-20 md:pt-24 md:pb-28 grid md:grid-cols-2 gap-12 items-center">
           <div className="reveal">
-
-            <p className="mono text-xs uppercase tracking-widest text-forest mb-4">
+            <p className="mono text-xs uppercase tracking-widest text-forest mb-6">
               Instrukcije · Pripreme za maturu · Web dizajn
             </p>
-            <br />
-            <br />
 
-            <h1 className="...ostaju iste klase...">
-              Znanje s <span className="...ista klasa kao sada...">planom</span>.
+            <h1 className="text-4xl md:text-6xl leading-[1.05] mb-8">
+              Znanje s{" "}
+              <span className="underline decoration-gold/60 decoration-[0.35em] underline-offset-[-0.2em] [text-decoration-skip-ink:none]">
+                planom
+              </span>
+              .
               <br />
-              Rezultati s <span className="...ista klasa kao sada...">razlogom</span>.
+              Rezultati s{" "}
+              <span className="underline decoration-gold/60 decoration-[0.35em] underline-offset-[-0.2em] [text-decoration-skip-ink:none]">
+                razlogom
+              </span>
+              .
             </h1>
 
-            <br />
-            <br />
-
             <p className="text-ink-soft text-lg mb-8 max-w-md">
-
               Područje djelovanja obrta čine instrukcije, edukacije i pomoć u učenju,
               uz jasan plan kako doći do cilja – korak po korak.
-
-
             </p>
+
             <div className="flex flex-wrap gap-4">
               <Link
                 href="/termini"
@@ -98,7 +98,7 @@ export default function Home() {
         <section className="border-y border-line bg-paper-alt">
           <div className="mx-auto max-w-6xl px-6 py-16">
             <h2 className="text-2xl md:text-3xl mb-10 max-w-xl">
-              Tri načina da napredujemo zajedno
+              Četiri načina da napredujemo zajedno
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((s) => (

@@ -78,6 +78,20 @@ export function ContactForm() {
         />
       </div>
       <div className="flex flex-col gap-2">
+        <label htmlFor="phone" className="text-sm">
+          Broj mobitela
+        </label>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          required
+          autoComplete="tel"
+          className="rounded-xl border border-line bg-paper px-4 py-3 text-sm focus:border-forest outline-none"
+          placeholder="091 234 5678"
+        />
+      </div>
+      <div className="flex flex-col gap-2">
         <label htmlFor="topic" className="text-sm">
           Zanima me
         </label>

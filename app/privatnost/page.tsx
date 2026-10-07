@@ -40,10 +40,11 @@ export default function PrivatnostPage() {
                             ugovora (čl. 6. st. 1. t. b GDPR-a).
                         </li>
                         <li>
-                            <strong>Kontakt obrazac:</strong> ime, e-adresa i sadržaj poruke.
-                            Koristimo ih kako bismo odgovorili na vaš upit. Pravna osnova je
-                            poduzimanje radnji na vaš zahtjev (čl. 6. st. 1. t. b) odnosno
-                            naš legitimni interes da odgovorimo na upite (čl. 6. st. 1. t. f).
+                            <strong>Kontakt obrazac:</strong> ime i prezime, e-adresa, broj
+                            mobitela, tema upita i sadržaj poruke. Koristimo ih kako bismo
+                            odgovorili na vaš upit. Pravna osnova je poduzimanje radnji na
+                            vaš zahtjev (čl. 6. st. 1. t. b) odnosno naš legitimni interes da
+                            odgovorimo na upite (čl. 6. st. 1. t. f).
                         </li>
                         <li>
                             <strong>Izdavanje računa:</strong> podaci potrebni za račun i
