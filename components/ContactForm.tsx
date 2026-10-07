@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 // Zamijeni ID ispod svojim Formspree endpointom (isti obrazac kao za Ring Ring Kennel).
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvkpkzok";
@@ -112,6 +113,13 @@ export function ContactForm() {
       >
         {status === "sending" ? "Šaljem..." : "Pošalji poruku"}
       </button>
+      <p className="text-xs text-ink-soft mt-3">
+        Slanjem obrasca potvrđujete da ste pročitali{" "}
+        <Link href="/privatnost" className="text-forest hover:underline">
+          Obavijest o privatnosti
+        </Link>
+        .
+      </p>
       {status === "error" && (
         <p className="text-sm text-red-700">
           Nešto je pošlo po zlu. Pokušaj ponovno ili piši izravno na e-mail.
