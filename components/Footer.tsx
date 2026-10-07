@@ -31,6 +31,9 @@ export function Footer() {
             <li>+385 91 9522169</li>
             <li>Rijeka, Hrvatska</li>
           </ul>
+          <Link href="/privatnost" className="hover:underline">
+            Obavijest o privatnosti
+          </Link>
         </div>
       </div>
       <div className="border-t border-line">

@@ -159,8 +159,8 @@ export function BookingCalendar() {
                 type="button"
                 onClick={() => setRazina("osnovna")}
                 className={`rounded-xl border px-4 py-3 text-sm transition-colors ${razina === "osnovna"
-                    ? "border-forest bg-forest text-paper"
-                    : "border-line hover:border-forest"
+                  ? "border-forest bg-forest text-paper"
+                  : "border-line hover:border-forest"
                   }`}
               >
                 Osnovna škola
@@ -169,8 +169,8 @@ export function BookingCalendar() {
                 type="button"
                 onClick={() => setRazina("srednja")}
                 className={`rounded-xl border px-4 py-3 text-sm transition-colors ${razina === "srednja"
-                    ? "border-forest bg-forest text-paper"
-                    : "border-line hover:border-forest"
+                  ? "border-forest bg-forest text-paper"
+                  : "border-line hover:border-forest"
                   }`}
               >
                 Srednja škola i dalje
@@ -187,8 +187,8 @@ export function BookingCalendar() {
                   type="button"
                   onClick={() => setGrupa(g)}
                   className={`rounded-xl border px-3 py-3 text-sm transition-colors ${grupa === g
-                      ? "border-forest bg-forest text-paper"
-                      : "border-line hover:border-forest"
+                    ? "border-forest bg-forest text-paper"
+                    : "border-line hover:border-forest"
                     }`}
                 >
                   {GRUPA_LABEL[g]}
@@ -274,10 +274,10 @@ export function BookingCalendar() {
                               setStep(3);
                             }}
                             className={`mono text-xs rounded-lg px-2 py-1.5 text-left transition-colors ${isBusy
-                                ? "bg-line text-ink-soft/60 cursor-not-allowed line-through"
-                                : isSelected
-                                  ? "bg-forest text-paper"
-                                  : "bg-paper border border-line hover:border-forest"
+                              ? "bg-line text-ink-soft/60 cursor-not-allowed line-through"
+                              : isSelected
+                                ? "bg-forest text-paper"
+                                : "bg-paper border border-line hover:border-forest"
                               }`}
                             title={isBusy ? "Zauzeto" : "Slobodno"}
                           >
@@ -425,6 +425,14 @@ export function BookingCalendar() {
           >
             {submitStatus === "sending" ? "Šaljem…" : "Pošalji zahtjev"}
           </button>
+
+          <p className="text-xs text-ink-soft mt-3">
+            Slanjem obrasca potvrđujete da ste pročitali{" "}
+            <Link href="/privatnost" className="text-forest hover:underline">
+              Obavijest o privatnosti
+            </Link>
+
+          </p>
         </form>
       )}
     </div>
