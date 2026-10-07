@@ -3,6 +3,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { GradeMark } from "@/components/GradeMark";
 
+
 const services = [
   {
     title: "Instrukcije",
@@ -51,17 +52,25 @@ export default function Home() {
       <main>
         <section className="mx-auto max-w-6xl px-6 pt-16 pb-20 md:pt-24 md:pb-28 grid md:grid-cols-2 gap-12 items-center">
           <div className="reveal">
-            <p className="mono text-xs uppercase tracking-widest text-forest mb-4">
-              Instrukcije · Matura · Web dizajn
-            </p>
+
             <h1 className="text-4xl md:text-5xl leading-tight mb-6">
               Od <span className="mark">nesigurnosti</span> do{" "}
               <span className="mark">znanja</span> koje se vidi u ocjeni.
             </h1>
+
+            <p className="mono text-xs uppercase tracking-widest text-forest mb-4">
+              Instrukcije · Pripreme za maturu · Web dizajn
+            </p>
+            Znanje s <span className="...ista klasa kao sada...">planom</span>.
+            <br />
+            Rezultati s <span className="...ista klasa kao sada...">razlogom</span>.
+
             <p className="text-ink-soft text-lg mb-8 max-w-md">
-              DSC STUDIO je obrt za obrazovanje, izradu i savjetovanje — ova
-              stranica pokriva instrukcije, edukacije i pisanje radova, uz
-              jasan plan kako doći do cilja, korak po korak.
+              DSC STUDIO je obrt za obrazovanje, proizvodnju i usluge <br />
+              Područje djelovanja obrta čine instrukcije, edukacije i pomoć u učenju,
+              uz jasan plan kako doći do cilja – korak po korak.
+
+
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
