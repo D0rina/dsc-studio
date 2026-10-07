@@ -14,6 +14,12 @@ const matura = [
   { grupa: "3+ polaznika", cijena: "270 €" },
 ];
 
+const webDizajn = [
+  { grupa: "1 polaznik", cijena: "20 €" },
+  { grupa: "2 polaznika", cijena: "17 €" },
+  { grupa: "3+ polaznika", cijena: "15 €" },
+];
+
 const tekstovi = [
   { usluga: "Pisanje i uređivanje teksta", jedinica: "kartica teksta", cijena: "10 €" },
   { usluga: "Lektura i korektura teksta", jedinica: "kartica teksta", cijena: "8 €" },
@@ -75,7 +81,33 @@ export default function Cjenik() {
             Zatraži termin →
           </Link>
         </section>
-
+        <section className="mx-auto max-w-6xl px-6 pb-16">
+          <h2 className="text-2xl mb-2">Edukacija web dizajna</h2>
+          <p className="text-ink-soft text-sm mb-6">
+            Cijena po polazniku, 45 min termin
+          </p>
+          <div className="overflow-x-auto rounded-2xl border border-line">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-paper-alt text-left">
+                  <th className="px-5 py-3 font-normal text-ink-soft">Veličina grupe</th>
+                  <th className="px-5 py-3 font-normal text-ink-soft">Cijena</th>
+                </tr>
+              </thead>
+              <tbody>
+                {webDizajn.map((row) => (
+                  <tr key={row.grupa} className="border-t border-line">
+                    <td className="px-5 py-3">{row.grupa}</td>
+                    <td className="px-5 py-3 mono text-forest">{row.cijena}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Link href="/kontakt" className="inline-block mt-4 text-sm text-forest hover:underline">
+            Javi se za dogovor →
+          </Link>
+        </section>
         <section className="mx-auto max-w-6xl px-6 pb-16">
           <h2 className="text-2xl mb-2">Priprema za maturu</h2>
           <p className="text-ink-soft text-sm mb-6">
