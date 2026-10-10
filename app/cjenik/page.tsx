@@ -23,6 +23,9 @@ const webDizajn = [
 const tekstovi = [
   { usluga: "Pisanje i uređivanje teksta", jedinica: "kartica teksta", cijena: "10 €" },
   { usluga: "Lektura i korektura teksta", jedinica: "kartica teksta", cijena: "8 €" },
+];
+
+const materijali = [
   { usluga: "Izrada nastavnih materijala", jedinica: "po komadu", cijena: "20 €" },
   {
     usluga: "Izrada edukativnih materijala po narudžbi",
@@ -48,7 +51,7 @@ export default function Cjenik() {
             svoj dio.
           </p>
           <p className="mono text-xs text-ink-soft">
-            Cijene vrijede od 10. 9. 2026.
+            Cijene na dan 10. 9. 2026.
           </p>
         </section>
 
@@ -136,8 +139,8 @@ export default function Cjenik() {
           </Link>
         </section>
 
-        <section className="mx-auto max-w-6xl px-6 pb-24">
-          <h2 className="text-2xl mb-2">Pisanje radova</h2>
+        <section className="mx-auto max-w-6xl px-6 pb-16">
+          <h2 className="text-2xl mb-2">Pomoć u pisanju radova</h2>
           <p className="text-ink-soft text-sm mb-6">
             Usluge pisanja i uređivanja. Kartica = 1800 znakova s razmacima.
           </p>
@@ -152,6 +155,36 @@ export default function Cjenik() {
               </thead>
               <tbody>
                 {tekstovi.map((row) => (
+                  <tr key={row.usluga} className="border-t border-line">
+                    <td className="px-5 py-3">{row.usluga}</td>
+                    <td className="px-5 py-3 text-ink-soft">{row.jedinica}</td>
+                    <td className="px-5 py-3 mono text-forest">{row.cijena}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Link href="/kontakt" className="inline-block mt-4 text-sm text-forest hover:underline">
+            Javi se za dogovor →
+          </Link>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-6 pb-24">
+          <h2 className="text-2xl mb-2">Pisanje nastavnih i edukativnih materijala</h2>
+          <p className="text-ink-soft text-sm mb-6">
+            Samostalna izrada materijala po narudžbi.
+          </p>
+          <div className="overflow-x-auto rounded-2xl border border-line">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-paper-alt text-left">
+                  <th className="px-5 py-3 font-normal text-ink-soft">Usluga</th>
+                  <th className="px-5 py-3 font-normal text-ink-soft">Jedinica</th>
+                  <th className="px-5 py-3 font-normal text-ink-soft">Cijena</th>
+                </tr>
+              </thead>
+              <tbody>
+                {materijali.map((row) => (
                   <tr key={row.usluga} className="border-t border-line">
                     <td className="px-5 py-3">{row.usluga}</td>
                     <td className="px-5 py-3 text-ink-soft">{row.jedinica}</td>

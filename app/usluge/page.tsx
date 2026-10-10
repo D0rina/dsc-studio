@@ -8,7 +8,7 @@ const groups = [
     tag: "OŠ / SŠ",
     title: "Instrukcije",
     lead:
-      "Individualni ili grupni sati iz informatike i srodnih predmeta, prilagođeni tempu i razini učenika.",
+      "Individualni ili grupni sati iz informatike, matematike i fizike, prilagođeni tempu i razini učenika.",
     points: [
       "Nadoknađivanje propuštenog gradiva i priprema za pisane provjere",
       "Rad na razumijevanju, ne samo na zadatku ispred sebe",
@@ -20,14 +20,25 @@ const groups = [
     tag: "4. razred",
     title: "Priprema za državnu maturu",
     lead:
-      "Sustavan pregled ispitnih ishoda iz informatike uz probne ispite i rad na tipičnim greškama.",
+      "Sustavan pregled ispitnih ishoda iz informatike, matematike i fizike uz probne ispite i rad na tipičnim greškama.",
     points: [
       "Plan priprema unatrag od datuma ispita",
       "Probni testovi po strukturi stvarnog ispita",
       "Fokus na teme koje najčešće nose bodove",
     ],
   },
-
+  {
+    id: "web-dizajn",
+    tag: "Web",
+    title: "Edukacija web dizajna",
+    lead:
+      "Od osnova HTML-a i CSS-a do izrade vlastite web stranice — za srednjoškolce, studente i sve koji žele naučiti graditi web.",
+    points: [
+      "Osnove HTML-a i CSS-a, korak po korak",
+      "Izrada vlastite web stranice kao praktičnog projekta",
+      "Individualno ili u maloj grupi, prilagođeno predznanju",
+    ],
+  },
   {
     id: "pisanje-radova",
     tag: "Tekst",
@@ -38,6 +49,18 @@ const groups = [
       "Lektura i korektura — pravopis, gramatika, stil",
       "Strukturiranje rada: uvod, razrada, zaključak, popis literature",
       "Oblikovanje teksta prema zadanim uputama (fakultet, škola)",
+    ],
+  },
+  {
+    id: "materijali",
+    tag: "Materijali",
+    title: "Nastavni i edukativni materijali",
+    lead:
+      "Samostalna izrada nastavnih i edukativnih materijala po narudžbi.",
+    points: [
+      "Radni listovi, vježbe i zadaci za nastavu",
+      "Edukativni sadržaji prilagođeni dobi i razini polaznika",
+      "Izrada po dogovoru i zadanim uputama",
     ],
   },
 ];
@@ -52,7 +75,7 @@ export default function Usluge() {
             Usluge
           </p>
           <h1 className="text-4xl md:text-5xl max-w-2xl mb-4">
-            Tri jasno definirana puta do znanja.
+            Jasno definirani putovi do znanja.
           </h1>
           <p className="text-ink-soft max-w-xl text-lg">
             Svaka usluga ima svoj plan i ritam — biraš ono što odgovara

@@ -12,7 +12,7 @@ const services = [
   },
   {
     title: "Priprema za maturu",
-    desc: "Sustavna priprema za državnu maturu iz informatike uz probne ispite i praćenje napretka po ishodima.",
+    desc: "Sustavna priprema za državnu maturu iz informatike, matematike i fizike uz probne ispite i praćenje napretka po ishodima.",
     tag: "4. razred",
   },
   {
@@ -24,6 +24,11 @@ const services = [
     title: "Pomoć u pisanju radova",
     desc: "Lektoriranje, oblikovanje i strukturiranje seminarskih, maturalnih i drugih pisanih radova.",
     tag: "Tekst",
+  },
+  {
+    title: "Nastavni i edukativni materijali",
+    desc: "Izrada nastavnih i edukativnih materijala: radni listovi, vježbe, prezentacije i pripreme za nastavu.",
+    tag: "Materijali",
   },
 ];
 
