@@ -1,10 +1,33 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "DSC STUDIO obrt za obrazovanje, proizvodnju i usluge — Instrukcije, priprema za maturu, edukacije web dizajna",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "DSC STUDIO | Instrukcije i priprema za maturu, Rijeka",
+    template: "%s | DSC STUDIO",
+  },
   description:
-    "Instrukcije iz informatike i drugih predmeta, priprema za državnu maturu i edukacije web dizajna. Jasan plan, mjerljiv napredak.",
+    "Instrukcije, priprema za državnu maturu iz informatike, matematike i fizike, edukacije web dizajna i pomoć u pisanju radova. DSC STUDIO, Rijeka.",
+  applicationName: "DSC STUDIO",
+  openGraph: {
+    type: "website",
+    locale: "hr_HR",
+    siteName: "DSC STUDIO",
+    title: "DSC STUDIO | Instrukcije i priprema za maturu, Rijeka",
+    description:
+      "Instrukcije, priprema za državnu maturu, edukacije i pomoć u pisanju radova uz jasan plan, korak po korak.",
+    images: [{ url: "/logo.png", width: 240, height: 240, alt: "DSC STUDIO" }],
+  },
+  twitter: {
+    card: "summary",
+    title: "DSC STUDIO | Instrukcije i priprema za maturu, Rijeka",
+    description:
+      "Instrukcije, priprema za državnu maturu, edukacije i pomoć u pisanju radova.",
+    images: ["/logo.png"],
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
