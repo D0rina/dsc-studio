@@ -1,1 +1,1 @@
-export const SITE_URL = "https://dsc-studio-rijeka.netlify.app";
+export const SITE_URL = "export const SITE_URL = "https://dsc-studio.hr";
