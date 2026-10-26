@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { redis, BOOKINGS_KEY } from "@/lib/redis";
-import { priceFor, toISODate, SESSION_MINUTES, Razina, Grupa } from "@/lib/slots";
+import { priceFor, toISODate, slotsForDate, SESSION_MINUTES, Razina, Grupa } from "@/lib/slots";
 
 export type Booking = {
   id: string;
@@ -50,7 +50,31 @@ export async function POST(req: NextRequest) {
   if (!validDateFormat) {
     return NextResponse.json({ error: "Neispravan datum." }, { status: 400 });
   }
+  if (!["osnovna", "srednja"].includes(razina) || !["1", "2", "3+"].includes(grupa)) {
+    return NextResponse.json({ error: "Neispravni podaci." }, { status: 400 });
+  }
 
+  // Datum mora stvarno postojati, a termin mora biti na popisu dostupnih termina po rasporedu.
+  const [y, mo, d] = date.split("-").map(Number);
+  const dateObj = new Date(y, mo - 1, d);
+  if (toISODate(dateObj) !== date) {
+    return NextResponse.json({ error: "Neispravan datum." }, { status: 400 });
+  }
+  if (!slotsForDate(dateObj).includes(time)) {
+    return NextResponse.json({ error: "Taj termin nije dostupan." }, { status: 400 });
+  }
+
+  // Ne dopuštamo termine u prošlosti (po vremenu u Hrvatskoj).
+  const now = new Date();
+  const todayISO = now.toLocaleDateString("sv-SE", { timeZone: "Europe/Zagreb" });
+  const nowTime = now.toLocaleTimeString("sv-SE", {
+    timeZone: "Europe/Zagreb",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  if (date < todayISO || (date === todayISO && time <= nowTime)) {
+    return NextResponse.json({ error: "Taj je termin već prošao." }, { status: 400 });
+  }
   const all = ((await redis.get<Booking[]>(BOOKINGS_KEY)) ?? []) as Booking[];
   const alreadyTaken = all.some(
     (b) => b.date === date && b.time === time && b.status !== "rejected"

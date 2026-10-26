@@ -1,13 +1,44 @@
-// Radno vrijeme po danu u tjednu — uredi po potrebi (0 = nedjelja).
-export const WORKING_HOURS: Record<number, { start: number; end: number } | null> = {
-  0: { start: 15, end: 20 },
-  1: { start: 15, end: 20 },
-  2: { start: 15, end: 20 },
-  3: { start: 15, end: 20 },
-  4: { start: 15, end: 20 },
-  5: { start: 15, end: 20 },
-  6: { start: 10, end: 14 },
+// ====================== RASPORED TERMINA ======================
+// Tjedni se izmjenjuju: "popodne" (škola popodne) i "ujutro" (škola ujutro).
+// Tjedan koji počinje ponedjeljkom ispod je POPODNEVNI, sljedeći je jutarnji itd.
+const POPODNE_TJEDAN_PONEDJELJAK = "2026-10-26";
+
+type Window = { start: string; end: string }; // "HH:MM"
+type TjedanTip = "ujutro" | "popodne";
+
+const VIKEND: Record<number, Window[]> = {
+  // Nedjelja cijeli dan (promijeni sate po želji), subota kao dosad.
+  0: [{ start: "09:00", end: "20:00" }],
+  6: [{ start: "10:00", end: "14:00" }],
 };
+
+const SCHEDULE: Record<TjedanTip, Record<number, Window[]>> = {
+  // Škola ujutro: slobodna si od 17:00 do 20:00.
+  ujutro: {
+    ...VIKEND,
+    1: [{ start: "17:00", end: "20:00" }],
+    2: [{ start: "17:00", end: "20:00" }],
+    3: [{ start: "17:00", end: "20:00" }],
+    4: [{ start: "17:00", end: "20:00" }],
+    5: [{ start: "17:00", end: "20:00" }],
+  },
+  // Škola popodne: ujutro si slobodna. Srijeda 8:30-9:15 je zauzeta.
+  popodne: {
+    ...VIKEND,
+    1: [{ start: "08:00", end: "12:00" }],
+    2: [{ start: "08:00", end: "12:00" }],
+    3: [{ start: "09:15", end: "12:00" }],
+    4: [{ start: "08:00", end: "15:00" }],
+    5: [{ start: "08:00", end: "15:00" }],
+  },
+};
+
+// Iznimke za pojedine datume (praznici, jednokratne promjene).
+// Prazan popis = nema termina taj dan. Primjer:
+// "2026-12-24": [],
+// "2026-12-28": [{ start: "10:00", end: "18:00" }],
+const EXCEPTIONS: Record<string, Window[]> = {};
+// ===============================================================
 
 export const SESSION_MINUTES = 45; // jedan "školski sat" — fiksno trajanje termina
 
@@ -30,23 +61,69 @@ export function priceFor(razina: Razina, grupa: Grupa): number {
   return PRICE_PER_SESSION[razina][grupa];
 }
 
+function toMinutes(t: string): number {
+  const [h, m] = t.split(":").map(Number);
+  return h * 60 + m;
+}
+
 function minutesToTime(mins: number): string {
   const h = Math.floor(mins / 60);
   const m = mins % 60;
   return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
 }
 
-// Svi mogući termini početka (svaki 45 min) unutar radnog vremena danog dana.
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+function utcDay(y: number, m: number, d: number): number {
+  return Date.UTC(y, m, d);
+}
+
+// Je li taj datum u "popodne" ili "ujutro" tjednu.
+export function tjedanTip(date: Date): TjedanTip {
+  const [ay, am, ad] = POPODNE_TJEDAN_PONEDJELJAK.split("-").map(Number);
+  const anchor = utcDay(ay, am - 1, ad);
+  const offset = (date.getDay() + 6) % 7; // pomak do ponedjeljka
+  const monday = utcDay(date.getFullYear(), date.getMonth(), date.getDate() - offset);
+  const weeks = Math.round((monday - anchor) / (7 * DAY_MS));
+  return ((weeks % 2) + 2) % 2 === 0 ? "popodne" : "ujutro";
+}
+
+function windowsForDate(date: Date): Window[] {
+  const iso = toISODate(date);
+  if (iso in EXCEPTIONS) return EXCEPTIONS[iso];
+  return SCHEDULE[tjedanTip(date)][date.getDay()] ?? [];
+}
+
+// Svi mogući termini početka (svaki 45 min) unutar slobodnih vremena danog dana.
 export function slotsForDate(date: Date): string[] {
-  const hours = WORKING_HOURS[date.getDay()];
-  if (!hours) return [];
   const out: string[] = [];
-  const endMinutes = hours.end * 60;
-  for (let m = hours.start * 60; m + SESSION_MINUTES <= endMinutes; m += SESSION_MINUTES) {
-    out.push(minutesToTime(m));
+  for (const w of windowsForDate(date)) {
+    const endMinutes = toMinutes(w.end);
+    for (let m = toMinutes(w.start); m + SESSION_MINUTES <= endMinutes; m += SESSION_MINUTES) {
+      out.push(minutesToTime(m));
+    }
   }
   return out;
 }
+
+// Zadržano zbog kompatibilnosti ako ga neka druga datoteka uvozi.
+export const WORKING_HOURS: Record<number, { start: number; end: number } | null> =
+  Object.fromEntries(
+    [0, 1, 2, 3, 4, 5, 6].map((day) => {
+      const all = [
+        ...SCHEDULE.ujutro[day],
+        ...SCHEDULE.popodne[day],
+      ];
+      if (all.length === 0) return [day, null];
+      return [
+        day,
+        {
+          start: Math.floor(Math.min(...all.map((w) => toMinutes(w.start))) / 60),
+          end: Math.ceil(Math.max(...all.map((w) => toMinutes(w.end))) / 60),
+        },
+      ];
+    })
+  );
 
 export function toISODate(d: Date): string {
   const year = d.getFullYear();
