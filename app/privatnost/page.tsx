@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-    title: "Obavijest o privatnosti | DSC STUDIO",
+    title: "Obavijest o privatnosti",
 };
 
 export default function PrivatnostPage() {
@@ -9,14 +9,14 @@ export default function PrivatnostPage() {
         <main className="mx-auto max-w-3xl px-6 py-16">
             <h1 className="text-4xl mb-2">Obavijest o privatnosti</h1>
             <p className="text-ink-soft text-sm mb-10">
-                Zadnja izmjena: 7. 10. 2026.
+                Zadnja izmjena: 26. 10. 2026.
             </p>
 
             <div className="space-y-8 leading-relaxed">
                 <section>
                     <h2 className="text-2xl mb-2">1. Tko obrađuje vaše podatke</h2>
                     <p>
-                        Voditelj obrade je DSC STUDIO, paušalni obrt, vl. Doroteja Greguric,
+                        Voditelj obrade je DSC STUDIO, paušalni obrt, vl. Doroteja Gregurić,
                         Rijeka. OIB: 87974880102. Adresa sjedišta: Vodovodna 17, Rijeka.
                     </p>
                     <p className="mt-2">
@@ -33,11 +33,11 @@ export default function PrivatnostPage() {
                     <ul className="list-disc pl-6 space-y-2">
                         <li>
                             <strong>Zahtjev za termin:</strong> ime i prezime, e-adresa,
-                            broj telefona, odabrana razina i veličina grupe, željeni termin
-                            i eventualna napomena. Koristimo ih kako bismo potvrdili ili
-                            odbili termin i održali nastavu. Pravna osnova je poduzimanje
-                            radnji na vaš zahtjev prije sklapanja ugovora i izvršenje
-                            ugovora (čl. 6. st. 1. t. b GDPR-a).
+                            broj telefona, razred, predmet, odabrana razina i veličina
+                            grupe, željeni termin i eventualna napomena. Koristimo ih kako
+                            bismo potvrdili ili odbili termin i održali nastavu. Pravna
+                            osnova je poduzimanje radnji na vaš zahtjev prije sklapanja
+                            ugovora i izvršenje ugovora (čl. 6. st. 1. t. b GDPR-a).
                         </li>
                         <li>
                             <strong>Kontakt obrazac:</strong> ime i prezime, e-adresa, broj
