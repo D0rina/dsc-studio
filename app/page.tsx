@@ -22,7 +22,7 @@ const services = [
   },
   {
     title: "Pomoć u pisanju radova",
-    desc: "Lektoriranje, oblikovanje i strukturiranje seminarskih, maturalnih i drugih pisanih radova.",
+    desc: "Oblikovanje i strukturiranje seminarskih, maturalnih i drugih pisanih radova.",
     tag: "Tekst",
   },
   {
