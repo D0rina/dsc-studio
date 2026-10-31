@@ -1,56 +1,72 @@
-# DSC STUDIO obrt za obrazovanje, proizvodnju i usluge — web stranica
+# DSC STUDIO — business website with online booking
 
-Next.js 16 + Tailwind v4 stranica za obrt "DSC STUDIO obrt za obrazovanje, proizvodnju i usluge" (instrukcije, priprema za
-državnu maturu, edukacije web dizajna).
+Website for **DSC STUDIO**, a small education and services business in Rijeka, Croatia —
+tutoring, state exam (matura) preparation, web design courses and writing assistance.
+Built and maintained by the business owner.
 
-## Pokretanje lokalno
+🇭🇷 *Web stranica obrta DSC STUDIO (instrukcije, priprema za maturu, edukacije web dizajna, pomoć u pisanju radova) sa sustavom za online rezervaciju termina.*
+
+🌐 **Live:** [dsc-studio.hr](https://dsc-studio.hr)
+
+---
+
+## Features
+
+- **Online booking in three steps** — the client picks a service and level (primary / secondary school),
+  then a date and a free time slot, then submits a request
+- **Smart availability** — slots in 15-minute steps, minimum session length of 45 minutes,
+  working hours configured per weekday; booked slots disappear for everyone else
+- **Request workflow** — every booking starts as *pending*; the owner approves or rejects it,
+  and only approved bookings block the slot
+- **Password-protected admin panel** with cookie-based session for managing booking requests
+- **E-mail notifications** for new booking requests and contact form messages (Formspree)
+- **Price list** with separate prices per school level
+- **SEO** — meta tags, sitemap and `robots.txt`; the admin area is excluded from indexing
+
+## Tech stack
+
+| Area | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router), React |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| Data | Upstash Redis (serverless, REST API) |
+| E-mail | Formspree |
+| Hosting | Netlify, deployed automatically from GitHub; custom `.hr` domain |
+
+## How booking works
+
 ```
+Client                        Website                         Owner
+  │  picks service + slot  ──▶  saves request as "pending"
+  │                              in Redis, sends e-mail  ──▶  gets notification
+  │                                                            │
+  │                              status → "confirmed"    ◀──  approves in admin panel
+  │                              slot shown as taken           (or rejects → slot freed)
+```
+
+## Design
+
+- Colours: forest green `#1F4B43` and gold `#D9A52B` on a light paper-like background
+- Fonts: Fraunces (headings), Inter (body text), JetBrains Mono (prices and labels)
+- Signature element: an animated "grade mark" on the home page — a school grade
+  changing from 2 to 5, showing what tutoring is really about
+
+## Running locally
+
+```bash
 npm install
+cp .env.example .env.local   # then fill in the values
 npm run dev
 ```
 
-## Prije objave, obavezno izmijeni:
-1. **Formspree** — u `components/ContactForm.tsx` zamijeni `FORMSPREE_ENDPOINT`
-   svojim endpointom (isto kao na Ring Ring Kennel stranici).
-2. **Kontakt podaci** — e-mail, telefon i adresa u `components/Footer.tsx` i
-   `app/kontakt/page.tsx` trenutno su placeholderi.
-3. **Cijene** — u `app/cjenik/page.tsx`, prilagodi iznose stvarnima.
-4. **Tekstovi** — sav sadržaj je smislen placeholder, ali provjeri svaku
-   stranicu i prilagodi svom stilu.
-5. **OIB / naziv obrta u footeru** — dodaj pravi naziv obrta kad ga
-   registriraš (npr. "DSC STUDIO obrt za obrazovanje, proizvodnju i usluge, obrt za obrazovne usluge, vl. ...").
+Environment variables (see `.env.example`):
 
-## Deploy
-Isti postupak kao za prethodne projekte: push na GitHub → import u Vercel.
+| Variable | Purpose |
+|---|---|
+| `UPSTASH_REDIS_REST_URL` | Redis database URL |
+| `UPSTASH_REDIS_REST_TOKEN` | Redis access token |
+| `ADMIN_PASSWORD` | Password for the admin panel |
+| `FORMSPREE_BOOKING_ENDPOINT` | Formspree form for booking notifications |
 
-## Dizajn
-- Boje: šumsko zelena (#1F4B43) + zlatna (#D9A52B) na svijetloj papirnatoj podlozi
-- Fontovi: Fraunces (naslovi), Inter (tekst), JetBrains Mono (cijene, oznake)
-- Signature element: "GradeMark" SVG (ocjena 2 → 5) na početnoj stranici,
-  simbolizira ono što instrukcije stvarno rade
-
-## Termini (kalendar + zahtjevi + admin odobravanje)
-
-Ova funkcionalnost treba besplatnu Upstash Redis bazu (traje ~2 minute):
-
-1. Idi na https://upstash.com → registracija (može preko GitHub računa)
-2. Create Database → Redis → izaberi regiju blizu Europe
-3. U bazi otvori tab **REST API** i kopiraj `UPSTASH_REDIS_REST_URL` i
-   `UPSTASH_REDIS_REST_TOKEN`
-4. U Vercelu, na projektu → Settings → Environment Variables, dodaj:
-   - `UPSTASH_REDIS_REST_URL`
-   - `UPSTASH_REDIS_REST_TOKEN`
-   - `ADMIN_PASSWORD` (lozinka po tvom izboru, za pristup `/admin`)
-5. Redeploy — nakon toga `/termini` i `/admin` rade uživo.
-
-Radno vrijeme (koji se termini uopće nude) uređuješ u `lib/slots.ts` —
-promijeni sate po danu u tjednu.
-
-**Kako radi tok:**
-- Netko na `/termini` odabere slobodan termin i pošalje zahtjev → status "na čekanju"
-- Ti na `/admin` (uz lozinku) vidiš zahtjev, odobriš ili odbiješ
-- Odobreni termin postaje "zauzeto" svima na `/termini`
-- Odbijeni termin se oslobađa
-
-`/admin` nije indeksiran od tražilica, ali link nigdje nije javno istaknut —
-zapamti ga ili dodaj u favorite: `tvoja-domena.hr/admin`.
+Working hours offered for booking are configured in `lib/slots.ts`.
