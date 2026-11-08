@@ -21,7 +21,12 @@ const services = [
     tag: "Web",
   },
   {
-    title: "Pomoć u pisanju radova",
+    title: "Izrada web stranica",
+    desc: "Web stranice za obrte i male tvrtke: posjetnica, poslovna stranica i webshop, uz održavanje po dogovoru.",
+    tag: "Izrada",
+  },
+  {
+    title: "Pomoć u oblikovanju radova",
     desc: "Oblikovanje i strukturiranje seminarskih, maturalnih i drugih pisanih radova.",
     tag: "Tekst",
   },

@@ -40,13 +40,25 @@ const groups = [
     ],
   },
   {
+    id: "izrada-web-stranica",
+    tag: "Izrada",
+    title: "Izrada web stranica",
+    lead:
+      "Pregledne, moderne web stranice za obrte i male tvrtke — od jednostavne posjetnice do webshopa.",
+    points: [
+      "Web stranica – posjetnica: kratka stranica s osnovnim informacijama i kontaktom",
+      "Web stranica – poslovna: više podstranica, usluge, kontakt forma i prilagodba mobitelima",
+      "Izrada webshopa i mjesečno održavanje web stranice po dogovoru",
+    ],
+  },
+  {
     id: "pisanje-radova",
     tag: "Tekst",
-    title: "Pomoć u pisanju radova",
+    title: "Pomoć u oblikovanju radova",
     lead:
-      "Lektoriranje, oblikovanje i strukturiranje seminarskih, maturalnih i drugih pisanih radova.",
+      "Oblikovanje i strukturiranje seminarskih, maturalnih i drugih pisanih radova.",
     points: [
-      "Lektura i korektura — pravopis, gramatika, stil",
+      "Savjeti i mentorstvo pri pisanju rada",
       "Strukturiranje rada: uvod, razrada, zaključak, popis literature",
       "Oblikovanje teksta prema zadanim uputama (fakultet, škola)",
     ],

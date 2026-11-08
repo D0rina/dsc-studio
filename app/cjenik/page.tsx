@@ -21,8 +21,7 @@ const webDizajn = [
 ];
 
 const tekstovi = [
-  { usluga: "Pisanje i uređivanje teksta", jedinica: "kartica teksta", cijena: "10 €" },
-  { usluga: "Lektura i korektura teksta", jedinica: "kartica teksta", cijena: "8 €" },
+  { usluga: "Oblikovanje i uređivanje dokumenta", jedinica: "kartica teksta", cijena: "10 €" },
 ];
 
 const materijali = [
@@ -32,6 +31,12 @@ const materijali = [
     jedinica: "po komadu",
     cijena: "30 €",
   },
+];
+const webStranice = [
+  { usluga: "Web stranica – posjetnica", jedinica: "po komadu", cijena: "300 €" },
+  { usluga: "Web stranica – poslovna", jedinica: "po komadu", cijena: "750 €" },
+  { usluga: "Izrada webshopa", jedinica: "po komadu", cijena: "1.200 €" },
+  { usluga: "Održavanje web stranice", jedinica: "mjesečno", cijena: "30 €" },
 ];
 
 export default function Cjenik() {
@@ -51,7 +56,7 @@ export default function Cjenik() {
             svoj dio.
           </p>
           <p className="mono text-xs text-ink-soft">
-            Cijene na dan 10. 9. 2026.
+            Cijene na dan 8. 11. 2026.
           </p>
         </section>
 
@@ -112,6 +117,35 @@ export default function Cjenik() {
           </Link>
         </section>
         <section className="mx-auto max-w-6xl px-6 pb-16">
+          <h2 className="text-2xl mb-2">Izrada web stranica</h2>
+          <p className="text-ink-soft text-sm mb-6">
+            Web stranice za obrte i male tvrtke. Konačna cijena ovisi o opsegu projekta.
+          </p>
+          <div className="overflow-x-auto rounded-2xl border border-line">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-paper-alt text-left">
+                  <th className="px-5 py-3 font-normal text-ink-soft">Usluga</th>
+                  <th className="px-5 py-3 font-normal text-ink-soft">Jedinica</th>
+                  <th className="px-5 py-3 font-normal text-ink-soft">Cijena</th>
+                </tr>
+              </thead>
+              <tbody>
+                {webStranice.map((row) => (
+                  <tr key={row.usluga} className="border-t border-line">
+                    <td className="px-5 py-3">{row.usluga}</td>
+                    <td className="px-5 py-3 text-ink-soft">{row.jedinica}</td>
+                    <td className="px-5 py-3 mono text-forest">{row.cijena}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Link href="/kontakt" className="inline-block mt-4 text-sm text-forest hover:underline">
+            Pošalji upit →
+          </Link>
+        </section>
+        <section className="mx-auto max-w-6xl px-6 pb-16">
           <h2 className="text-2xl mb-2">Priprema za maturu</h2>
           <p className="text-ink-soft text-sm mb-6">
             Paket pripreme: 20 termina × 90 min, cijena po polazniku
@@ -140,9 +174,9 @@ export default function Cjenik() {
         </section>
 
         <section className="mx-auto max-w-6xl px-6 pb-16">
-          <h2 className="text-2xl mb-2">Pomoć u pisanju radova</h2>
+          <h2 className="text-2xl mb-2">Pomoć u oblikovanju radova</h2>
           <p className="text-ink-soft text-sm mb-6">
-            Usluge pisanja i uređivanja. Kartica = 1800 znakova s razmacima.
+            Oblikovanje i strukturiranje radova i dokumenata. Kartica = 1800 znakova s razmacima.
           </p>
           <div className="overflow-x-auto rounded-2xl border border-line">
             <table className="w-full text-sm">
