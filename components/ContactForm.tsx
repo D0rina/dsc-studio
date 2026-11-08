@@ -104,6 +104,9 @@ export function ContactForm() {
           <option value="instrukcije">Instrukcije</option>
           <option value="matura">Priprema za maturu</option>
           <option value="web-dizajn">Edukacija web dizajna</option>
+          <option value="izrada-web-stranica">Izrada web stranica</option>
+          <option value="oblikovanje-radova">Pomoć u oblikovanju radova</option>
+          <option value="materijali">Nastavni i edukativni materijali</option>
           <option value="ostalo">Nešto drugo</option>
         </select>
       </div>
@@ -117,7 +120,7 @@ export function ContactForm() {
           required
           rows={4}
           className="rounded-xl border border-line bg-paper px-4 py-3 text-sm focus:border-forest outline-none resize-none"
-          placeholder="Razred, predmet i ono što ti trenutno predstavlja najveći problem..."
+          placeholder="Ukratko opiši što ti treba (razred i predmet, ili vrstu web stranice)..."
         />
       </div>
       <button
