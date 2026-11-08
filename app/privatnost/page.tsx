@@ -9,7 +9,7 @@ export default function PrivatnostPage() {
         <main className="mx-auto max-w-3xl px-6 py-16">
             <h1 className="text-4xl mb-2">Obavijest o privatnosti</h1>
             <p className="text-ink-soft text-sm mb-10">
-                Zadnja izmjena: 26. 10. 2026.
+                Zadnja izmjena: 8. 11. 2026.
             </p>
 
             <div className="space-y-8 leading-relaxed">
@@ -45,6 +45,15 @@ export default function PrivatnostPage() {
                             odgovorili na vaš upit. Pravna osnova je poduzimanje radnji na
                             vaš zahtjev (čl. 6. st. 1. t. b) odnosno naš legitimni interes da
                             odgovorimo na upite (čl. 6. st. 1. t. f).
+                        </li>
+                        <li>
+                            <strong>Izrada web stranica:</strong> ime i prezime ili naziv
+                            tvrtke, OIB i adresa (za ugovor i račun), e-adresa, broj telefona te
+                            sadržaj i materijali (tekstovi, fotografije, logotipi) koje
+                            dostavite za izradu stranice. Koristimo ih isključivo za izradu i
+                            održavanje vaše web stranice. Pravna osnova je izvršenje ugovora
+                            (čl. 6. st. 1. t. b GDPR-a). Ako materijali sadrže osobne podatke
+                            trećih osoba, odgovorni ste da ih smijete dostaviti.
                         </li>
                         <li>
                             <strong>Izdavanje računa:</strong> podaci potrebni za račun i
@@ -90,6 +99,7 @@ export default function PrivatnostPage() {
                     <ul className="list-disc pl-6 space-y-2">
                         <li>Zahtjevi za termine i podaci o održanoj nastavi: do 24 mjeseca od posljednjeg termina.</li>
                         <li>Upiti s kontakt obrasca: do 12 mjeseci od posljednje poruke.</li>
+                        <li>Podaci klijenata web stranica i dostavljeni materijali: do 24 mjeseca od završetka suradnje ili održavanja, osim ako propisi nalažu dulje.</li>
                         <li>Računi i računovodstvene isprave: rokove određuju porezni i računovodstveni propisi.</li>
                     </ul>
                     <p className="mt-2">Nakon isteka roka podatke brišemo.</p>
