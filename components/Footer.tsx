@@ -17,6 +17,7 @@ export function Footer() {
           </p>
           <ul className="space-y-2">
             <li><Link href="/usluge" className="hover:text-forest">Usluge</Link></li>
+            <li><Link href="/izrada-web-stranica" className="hover:text-forest">Izrada web stranica</Link></li>
             <li><Link href="/cjenik" className="hover:text-forest">Cjenik</Link></li>
             <li><Link href="/o-meni" className="hover:text-forest">O meni</Link></li>
             <li><Link href="/kontakt" className="hover:text-forest">Kontakt</Link></li>

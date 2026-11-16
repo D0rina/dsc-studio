@@ -6,7 +6,7 @@ import Link from "next/link";
 // Zamijeni ID ispod svojim Formspree endpointom (isti obrazac kao za Ring Ring Kennel).
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/mvkpkzok";
 
-export function ContactForm() {
+export function ContactForm({ defaultTopic = "instrukcije" }: { defaultTopic?: string }) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle"
   );
@@ -99,7 +99,7 @@ export function ContactForm() {
           id="topic"
           name="topic"
           className="rounded-xl border border-line bg-paper px-4 py-3 text-sm focus:border-forest outline-none"
-          defaultValue="instrukcije"
+          defaultValue={defaultTopic}
         >
           <option value="instrukcije">Instrukcije</option>
           <option value="matura">Priprema za maturu</option>

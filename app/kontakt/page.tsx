@@ -2,7 +2,16 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { ContactForm } from "@/components/ContactForm";
 
-export default function Kontakt() {
+const TEME = ["instrukcije", "matura", "web-dizajn", "izrada-web-stranica", "oblikovanje-radova", "materijali", "ostalo"];
+
+export default async function Kontakt({
+  searchParams,
+}: {
+  searchParams: Promise<{ tema?: string }>;
+}) {
+  const { tema } = await searchParams;
+  const pocetnaTema = tema && TEME.includes(tema) ? tema : "instrukcije";
+
   return (
     <>
       <Nav />
@@ -40,7 +49,7 @@ export default function Kontakt() {
               </div>
             </div>
           </div>
-          <ContactForm />
+          <ContactForm defaultTopic={pocetnaTema} />
         </section>
       </main>
       <Footer />

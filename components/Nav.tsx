@@ -3,6 +3,7 @@ import Link from "next/link";
 const links = [
   { href: "/", label: "Početna" },
   { href: "/usluge", label: "Usluge" },
+  { href: "/izrada-web-stranica", label: "Web stranice" },
   { href: "/termini", label: "Termini" },
   { href: "/cjenik", label: "Cjenik" },
   { href: "/o-meni", label: "O meni" },

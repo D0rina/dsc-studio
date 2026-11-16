@@ -42,7 +42,8 @@ const groups = [
   {
     id: "izrada-web-stranica",
     tag: "Izrada",
-    cta: "Pošalji upit →",
+    cta: "Paketi, cijene i primjeri →",
+    href: "/izrada-web-stranica",
     title: "Izrada web stranica",
     lead:
       "Pregledne, moderne web stranice za obrte i male tvrtke — od jednostavne posjetnice do webshopa.",
@@ -118,7 +119,7 @@ export default function Usluge() {
                   </div>
                 ))}
                 <Link
-                  href="/kontakt"
+                  href={g.href ?? "/kontakt"}
                   className="mt-4 text-sm text-forest hover:underline w-fit"
                 >
                   {g.cta ?? "Dogovori termin →"}

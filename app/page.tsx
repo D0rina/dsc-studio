@@ -22,8 +22,9 @@ const services = [
   },
   {
     title: "Izrada web stranica",
-    desc: "Web stranice za obrte i male tvrtke: posjetnica, poslovna stranica i webshop, uz održavanje po dogovoru.",
+    desc: "Web stranice za obrte, male tvrtke i apartmane: posjetnica, poslovna stranica i webshop, uz održavanje po dogovoru.",
     tag: "Izrada",
+    href: "/izrada-web-stranica",
   },
   {
     title: "Pomoć u oblikovanju radova",
@@ -122,7 +123,7 @@ export default function Home() {
                   <h3 className="text-xl">{s.title}</h3>
                   <p className="text-ink-soft text-sm flex-1">{s.desc}</p>
                   <Link
-                    href="/usluge"
+                    href={s.href ?? "/usluge"}
                     className="text-sm text-forest hover:underline mt-2"
                   >
                     Saznaj više →
